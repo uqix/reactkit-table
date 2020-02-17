@@ -1,0 +1,19 @@
+{
+  "name": "reactkit-table",
+  "version": "1.0.0",
+  "description": "An easy-to-use semantic-based Table React component using react-table and material-ui",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uqix/reactkit-table.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/uqix/reactkit-table/issues"
+  },
+  "homepage": "https://github.com/uqix/reactkit-table#readme"
+}
