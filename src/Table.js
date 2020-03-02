@@ -1,35 +1,123 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { Table as MrTable, TableHead, TableRow, TableCell, TableBody, TableFooter } from '@material-ui/core';
-import { useTable, usePagination, useFilters, useGlobalFilter } from 'react-table';
+import { Table as MrTable, TableHead, TableRow as MrTableRow, TableCell, TableBody, TableFooter } from '@material-ui/core';
+import { useTable, usePagination, useFilters, useGlobalFilter, useRowSelect, useExpanded } from 'react-table';
 import _ from 'lodash';
-import ActionCell from './ActionCell';
-import { Fragment, useEffect, useRef } from 'react';
+import { Fragment, useMemo, useCallback } from 'react';
 import TableToolbar from './TableToolbar';
-import React from 'react';
-import GlobalFilter from './GlobalFilter';
-import { parse as parseDate, format as formatDate } from 'date-fns'
-import * as availableColumnFilters from './columnFilters';
+import GlobalFilter from './filter/GlobalFilter';
 import TablePropTypes from './TablePropTypes';
 import TablePagination from './TablePagination';
+import TableRow from './TableRow';
+import flattenGlobalFilter from './filter/flattenGlobalFilter';
+import adaptColumns from './column/adaptColumns';
+import useAsyncModeIfSo from './useAsyncModeIfSo';
+import {getColumnFilters} from './util';
 
 Table.propTypes = TablePropTypes;
 
-// TODO columns and data Must be memoized, doc in PropTypes
 export default function Table(props) {
   const {
-    fetchData, // TODO propTypes
-    data,
+    columns,
+
+    queryRecords,
+    records,
+
+    recordIdKey = 'id',
+    recordNameKey = 'name',
+    recordParentIdKey,
+    recordChildrenKey,
+
+    actions,
     tools,
+
+    defaultDateParsePattern = 'yyyy-MM-dd HH:mm:SS',
+    defaultDateFormatPattern = defaultDateParsePattern,
+
+    rowDnd,
   } = props;
 
-  const asyncMode = Boolean(fetchData);
+  if (queryRecords && rowDnd) {
+    throw new Error('Must not useRowDnd in async mode(queryRecords)');
+  }
 
-  const defaultColumn = React.useMemo(
+  const defaultColumn = useMemo(
     () => ({
-      disableFilters: true, // to #id and action columns
+      disableFilters: true, // for #id and action columns
     }),
     []
+  );
+
+  const rowExpandEnabled = !!(recordParentIdKey || recordChildrenKey);
+
+  const _columns = useMemo(
+    () => adaptColumns(
+      columns,
+      actions,
+      {
+        rowExpandEnabled,
+        recordNameKey,
+        defaultDateParsePattern,
+        defaultDateFormatPattern,
+      },
+    ),
+    [
+      columns, actions,
+      rowExpandEnabled, recordNameKey,
+      defaultDateParsePattern, defaultDateFormatPattern
+    ]
+  );
+
+  const getRowId = useCallback(
+    record => (
+      typeof recordIdKey === 'string'
+        ? record[recordIdKey]
+        : recordIdKey(record)
+    ),
+    [recordIdKey]
+  );
+
+  const getSubRows = useCallback(
+    record => record[recordChildrenKey],
+    [recordChildrenKey]
+  );
+
+  const data = useMemo(
+    () => (
+      rowExpandEnabled && !recordChildrenKey && records
+        ? flatToTree(records, getRowId, recordParentIdKey)
+        : records
+    ) || [],
+    [rowExpandEnabled, recordParentIdKey, records, getRowId, recordChildrenKey]
+  );
+
+  const columnFormats = useMemo(
+    () => _columns
+      .filter(c => c.xFormat)
+      .reduce(
+        (pre, cur) => ({...pre,  [cur.id]: cur.xFormat}),
+        {}
+      ),
+    [_columns]
+  );
+
+  const table = useTable(
+    {
+      columns: _columns,
+      data,
+      getRowId,
+      getSubRows: recordChildrenKey && getSubRows,
+      defaultColumn,
+      ...buildManualOptions(Boolean(queryRecords)),
+      globalFilter: flattenGlobalFilter(columnFormats),
+    },
+    ...[
+      useFilters,
+      useGlobalFilter,
+      rowExpandEnabled && useExpanded,
+      usePagination,
+      useRowSelect,
+    ].filter(h => h)
   );
 
   const {
@@ -47,58 +135,9 @@ export default function Table(props) {
     gotoPage,
     state: {pageIndex, pageSize},
     setPageSize,
-  } = useTable(
-    {
-      columns: adaptColumns(props),
-      data,
-      defaultColumn,
-      ...buildManualOptions(asyncMode),
-    },
-    useFilters,
-    useGlobalFilter,
-    usePagination,
-  );
 
-  const queryColumnFilters = JSON.stringify(buildQueryColumnFilters(headerGroups));
-
-  const filteringState = useRef(queryColumnFilters + globalFilter);
-  const nextFilteringState = queryColumnFilters + globalFilter;
-  const filteringStateChanged = filteringState.current !== nextFilteringState;
-  if (filteringStateChanged) {
-    filteringState.current = nextFilteringState;
-  }
-
-  const paginationState = useRef({pageIndex, pageSize});
-  const paginationStateChanged =
-        pageIndex !== paginationState.current.pageIndex
-        || pageSize !== paginationState.current.pageSize;
-  if (paginationStateChanged) {
-    paginationState.current = {pageIndex, pageSize};
-  }
-
-  const nextQueryId = useRef(1);
-  if (filteringStateChanged || paginationStateChanged) {
-    nextQueryId.current++;
-  }
-
-  useEffect(
-    () => {
-      if (asyncMode) {
-        if (filteringStateChanged && pageIndex !== 0) {
-          gotoPage(0);
-        } else {
-          fetchData({
-            id: nextQueryId.current,
-            pageIndex,
-            pageSize,
-            globalFilter: globalFilter || null,
-            columnFilters: JSON.parse(queryColumnFilters),
-          });
-        }
-      }
-    },
-    [asyncMode, fetchData, pageIndex, pageSize, globalFilter, queryColumnFilters, filteringStateChanged, gotoPage]
-  );
+    selectedFlatRows,
+  } = table;
 
   const globalFilterProps = {
     preGlobalFilteredRows,
@@ -112,38 +151,51 @@ export default function Table(props) {
     pageIndex,
     gotoPage,
     setPageSize,
+    loading: !records,
   };
 
-  if (asyncMode) {
-    globalFilterProps.preGlobalFilteredRows = null;
+  useAsyncModeIfSo(
+    queryRecords,
+    records || [],
+    table,
+    globalFilterProps,
+    paginationProps
+  );
 
-    const expectedQueryId = nextQueryId.current;
-    const query = data.fromQuery;
-
-    if (query && query.id === expectedQueryId) {
-      paginationProps.totalRowCount = query.foundRowCount;
-      paginationProps.pageIndex = query.pageIndex;
-    } else {
-      paginationProps.asyncLoading = true;
-    }
-  }
+  console.debug('Render Table, loading', paginationProps.loading);
 
   return (
     <Fragment>
       <TableToolbar
         tools={tools}
         filters={buildFilters(headerGroups, globalFilterProps)}
+        selectedRecords={selectedFlatRows.map(r => r.original)}
+        records={records}
+        rowDnd={rowDnd}
       />
-      <MrTable {...getTableProps()}>
+      <MrTable
+        css={css`
+.MuiTableCell-root {
+  padding: 8px;
+}
+.MuiTableCell-head {
+  font-weight: bold;
+}
+            `}
+        {...getTableProps()}
+      >
         <TableHead>
           {headerGroups.map(g => (
-            <TableRow {...g.getHeaderGroupProps()}>
+            <MrTableRow {...g.getHeaderGroupProps()}>
               {g.headers.map(h => (
-                <TableCell {...h.getHeaderProps()} css={css`font-weight: bold;`}>
+                <TableCell
+                  css={h.xCss}
+                  {...h.getHeaderProps()}
+                >
                   {h.render('Header')}
                 </TableCell>
               ))}
-            </TableRow>
+            </MrTableRow>
           ))}
         </TableHead>
 
@@ -151,109 +203,27 @@ export default function Table(props) {
           {pageRows.map(r => {
             prepareRow(r);
             return (
-              <TableRow {...r.getRowProps()}>
-                {r.cells.map(c => (
-                  <TableCell {...c.getCellProps()}>
-                    {c.render('Cell')}
-                  </TableCell>
-                ))}
-              </TableRow>
+              <TableRow
+                {...r.getRowProps()}
+                row={r}
+                rowDnd={rowDnd}
+                records={records}
+                key={r.id}
+              />
             );
           })}
         </TableBody>
 
         <TableFooter>
-          <TableRow>
-            {paginationProps.asyncLoading
-             ? <TableCell colSpan={2}>加载中...</TableCell>
+          <MrTableRow>
+            {paginationProps.loading
+             ? <TableCell colSpan={3}>加载中...</TableCell>
              : <TablePagination {...paginationProps} />
             }
-          </TableRow>
+          </MrTableRow>
         </TableFooter>
       </MrTable>
     </Fragment>
-  );
-}
-
-function adaptColumns(props) {
-  const {columns, actions = []} = props;
-  return [
-    {
-      Header: '#',
-      accessor: 'id',
-      Cell: ({cell: {value}}) => (
-        <span css={css`color: gray;`}>#{value}</span>
-      ),
-    },
-
-    ...columns.map(c => buildColumn(c, props)),
-
-    ...(actions.length > 0 ? [
-      {
-        Header: '操作',
-        accessor: row => row,
-        id: 'ActionCell',
-        Cell: ActionCell(actions),
-      }
-    ] : []),
-  ];
-}
-
-function buildColumn(
-  {id, label, name, type = 'string', parse, format, filter, options},
-  {
-    defaultDateParsePattern = 'yyyy-MM-dd HH:mm:SS',
-    defaultDateFormatPattern = defaultDateParsePattern,
-  }
-) {
-  let resultName = name;
-  let resultFormat = format;
-
-  if (type === 'date') {
-    const parsePattern = _.isString(parse) ? parse : defaultDateParsePattern;
-    const formatPattern = _.isString(format) ? format : defaultDateFormatPattern;
-
-    if (parse) {
-      resultName = row => {
-        const str = _.isString(name) ? _.get(row, name) : name(row);
-        return parseDate(str, parsePattern, new Date());
-      };
-    }
-    if (!format || _.isString(format)) {
-      resultFormat = value => (
-        (value || null) && formatDate(value, formatPattern)
-      )
-    }
-
-    if (filter ===  true) {
-      filter = 'date'; // default filter for type
-    }
-  } else if (type === 'number') {
-    if (filter ===  true) {
-      filter = 'number';
-    }
-  } else if (type === 'string') {
-    if (filter ===  true) {
-      filter = 'text';
-    }
-  } else {
-    throw new Error(`Unknown column type: ${type}`);
-    // why no bool? just 'name' it to biz-meaningful string with 'filter' select
-  }
-
-  return _.omitBy(
-    {
-      // TODO sub columns recursively
-      Header: label,
-      id: id || (_.isString(name) ? name : label),
-      accessor: resultName,
-      Cell: resultFormat && (({cell: {value}}) => resultFormat(value)),
-      disableFilters: !filter,
-      ...availableColumnFilters[filter],
-      xFilterType: filter,
-      xOptions: options,
-    },
-    _.isUndefined
   );
 }
 
@@ -265,7 +235,7 @@ function buildFilters(headerGroups, globalFilterProps) {
         <f.type key={i} {...f.props} />
       )),
 
-    <GlobalFilter key='filterG' {...globalFilterProps} />
+    <GlobalFilter key='G' {...globalFilterProps} />
   ]
 }
 
@@ -278,22 +248,20 @@ function buildManualOptions(asyncMode) {
     } : null;
 }
 
-function buildQueryColumnFilters(headerGroups) {
-  return _.sortBy(
-    getColumnFilters(headerGroups)
-      .map(({id, filterValue, xFilterType}) => (
-        {
-          id,
-          type: xFilterType,
-          value: filterValue === undefined ? null : filterValue,
-        }
-      )),
-    'id'
-  );
-}
+function flatToTree(records, getRowId, parentIdKey) {
+  if (!_.isArray(records)) {
+    throw new Error('records must be array');
+  }
 
-function getColumnFilters(headerGroups) {
-  return _.flatMap(headerGroups, g =>
-    g.headers.filter(h => h.canFilter)
-  );
+  const nodes = JSON.parse(JSON.stringify(records));
+
+  nodes.forEach(n => {
+    const children = nodes.filter(n2 =>
+      n2[parentIdKey] === getRowId(n)
+    );
+    n.subRows = children;
+  });
+
+  const roots = nodes.filter(n => !n[parentIdKey]);
+  return roots;
 }

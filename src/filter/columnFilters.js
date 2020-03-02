@@ -4,23 +4,26 @@ import NumberColumnFilter from './NumberColumnFilter';
 import TextColumnFilter from './TextColumnFilter';
 import dateFilter from './dateFilter';
 import numberFilter from './numberFilter';
+import textFilter from './textFilter';
+import flatten from './flatten';
+import exactTextCaseFilter from './exactTextCaseFilter';
 
 export const select = {
   Filter: SelectColumnFilter,
-  filter: 'exactTextCase'
+  filter: flatten(exactTextCaseFilter)
 };
 
 export const date = {
   Filter: DateColumnFilter,
-  filter: dateFilter
+  filter: flatten(dateFilter)
 };
 
 export const number = {
   Filter: NumberColumnFilter,
-  filter: numberFilter
+  filter: flatten(numberFilter)
 };
 
 export const text = {
   Filter: TextColumnFilter,
-  filter: 'text'
+  filter: flatten(textFilter)
 };

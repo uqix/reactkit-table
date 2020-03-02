@@ -7,14 +7,9 @@ export default function GlobalFilter({
   setGlobalFilter,
   globalFilter,
 }) {
-  const preFilteredRowCount =
-        preGlobalFilteredRows
-        ? `(${preGlobalFilteredRows.length}行)`
-        : '';
-
   return (
     <TextField
-      label={`全局搜${preFilteredRowCount}`}
+      label={`搜全局`}
       value={globalFilter || ''}
       onChange={event =>
         setGlobalFilter(event.target.value || undefined)

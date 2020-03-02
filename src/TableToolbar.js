@@ -6,13 +6,33 @@ import { useRouteMatch } from 'react-router-dom';
 import { useState } from 'react';
 import React from 'react';
 
-export default function TableToolbar({tools = [], filters}) {
+// TODO memo
+export default function TableToolbar({
+  tools = [],
+  filters,
+  selectedRecords,
+  records,
+}) {
   const match = useRouteMatch();
+
   return (
     <Toolbar>
-      {tools.map((Tool, i) =>
-        <Tool key={i} match={match} />
-      )}
+      <div
+        css={theme => css`
+.MuiButton-root {
+    margin-right: ${theme.spacing(2)}px;
+}
+            `}
+      >
+        {tools.map((Tool, i) =>
+          <Tool
+            key={i}
+            match={match}
+            selectedRecords={selectedRecords}
+            records={records}
+          />
+        )}
+      </div>
       <div css={css`flex-grow: 1;`} />
       <SearchBar filters={filters} />
     </Toolbar>
@@ -30,7 +50,12 @@ function SearchBar({filters}) {
 }
           `}
     >
-      <Tooltip title={advancedModeEnabled ? '关闭高级模式'  : '打开高级模式(区间 多选等)'}>
+      <Tooltip
+        title={advancedModeEnabled
+               ? '关闭高级模式'
+               : '打开高级模式(区间)'
+              }
+      >
         <IconButton
           onClick={() => setAdvancedModeEnabled(!advancedModeEnabled)}
           color={advancedModeEnabled ? 'primary' : 'default'}

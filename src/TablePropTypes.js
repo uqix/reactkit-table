@@ -3,40 +3,66 @@ import PropTypes from 'prop-types';
 const {arrayOf, oneOfType, shape, oneOf, string, func, object, bool, number, exact} = PropTypes;
 
 const TablePropTypes = {
+  // 列定义数组, 需要memoized
   columns: arrayOf(exact({
-    // 列id
-    // 默认为: name[is String] || label, 有冲突时才需要指定
+    // 列id, 默认值造成冲突时才需要指定
+    // 默认值: string name || label
     id: string,
 
     // 列名
     label: string.isRequired,
 
-    // 列取值的data数组元素字段名
-    // 或指定深路径, 参考 https://lodash.com/docs/4.17.15#get
-    // 或函数: row => value
+    // 列value的record字段名
+    // 或函数: record => value
     name: oneOfType([string, func]).isRequired,
 
     // 列数据类型
     // 注意: bool一般自定义name函数转为业务string配合select filter使用
+    // 默认值: 'string'
+    // TODO bool
     type: oneOf(['string', 'number', 'date']),
 
-    // 通过name取值后需要进一步转换为目标type吗?
-    // true为使用该类型的默认格式转换
-    // 或指定格式串, 需符合 https://date-fns.org/v2.9.0/docs/parse
-    // 或格式函数: value[string] => value[type]
+    // 通过name取值后需要进一步解析为目标type吗?
+    // true为使用该类型的默认格式解析
+    // 或格式串, date需符合 https://date-fns.org/v2.9.0/docs/parse
+    // 或解析函数: value => new value
+    // 默认值: value => value
     // 典型场景: date
     parse: oneOfType([bool, string, func]),
 
     // 显示值时需要进一步格式化吗?
-    // true为使用该类型的默认格式
-    // 或指定格式串, 需符合 https://date-fns.org/v2.9.0/docs/format
-    // 或格式函数: value => string/<Component>
-    // 典型场景: date, 加样式
-    format: oneOfType([bool, string, func]),
+    // 格式串
+    // 或格式函数: value => string
+    // 默认值:
+    // date: value => yyyy-MM-dd HH:mm:SS
+    // bool: TODO
+    // number: TODO
+    // 其他: value => value
+    // 典型场景: date bool
+    format: oneOfType([string, func]),
+
+    // 显示值时需要进一步组件化吗?
+    // {value} => node
+    // 默认值: {value} => value
+    // 典型场景: 加样式
+    render: func,
+
+    /*
+从record中的值到显示在界面上的转化流程:
+record
+  [name] ->
+value in record
+  [parse] ->
+value in row
+  [format] ->
+value for user and global filter
+  [render] ->
+display in UI
+     */
 
     // 启用工具栏(右)过滤器吗?
     // true为使用该类型默认的过滤器
-    // 或指定要使用的过滤器名
+    // 或要使用的过滤器名
     filter: oneOf([
       true,
 
@@ -57,7 +83,7 @@ const TablePropTypes = {
       'select',
     ]),
 
-    // 当filter为select时指定选项, 一般在async模式下使用, 本地模式会自动生成
+    // 当filter为select时指定选项, 一般在async模式下使用, local模式将自动生成
     options: oneOfType([
       arrayOf(shape({
         // 作为option的提交value
@@ -72,9 +98,9 @@ const TablePropTypes = {
     ]),
   })).isRequired,
 
-  // 开启async模式, 即服务端过滤和分页
-  // 获取数据函数: query => 调API
-  // query结构:
+  // 查询数据函数, 将开启async模式(即服务端过滤和分页)
+  // query => 调API
+  // query:
 /*
 {
   "id": number, // 组件分配的查询id, 自增, 用于忽略掉不符合当前查询参数的响应数据
@@ -90,25 +116,48 @@ const TablePropTypes = {
   ]
 }
 */
-  fetchData: func,
+  queryRecords: func,
 
-  // 表格数据
-  // 注意: 不论async模式还是本地模式, 都通过data传数据
-  // 在async模式下, data数组需新增属性fromQuery:
-  // data.fromQuery = {...query, foundRowCount: 过滤后分页前的匹配行数}
-  data: arrayOf(object).isRequired,
+  // 表格数据, 需要memoized
+  // 注意: async和local模式都是通过该prop传数据
+  // 在async模式下, 数组需要加属性fromQuery:
+  // records.fromQuery = {...query, foundRowCount: 过滤后分页前的匹配行数}
+  records: arrayOf(object),
 
-  // 操作列组件数组, (row, match) => <Component>
+  // record id字段名
+  // 或函数: record => id, 需要memoized
+  // 默认值: 'id'
+  recordIdKey: oneOfType([string, func]),
+
+  // record name字段名
+  // 或函数: record => name, 需要memoized
+  // 默认值: 'name'
+  // 注意: 当启用rowExpand时name将拼接在toggle icon之后, 可以充当name列
+  recordNameKey: oneOfType([string, func]),
+
+  // record parent id字段名, 用于flat形式的树状数据
+  // 注意: 指定后将启用rowExpand
+  recordParentIdKey: string,
+
+  // record children字段名, 用于nested形式的树状数据
+  // 注意: 指定后将启用rowExpand
+  recordChildrenKey: string,
+
+  // 操作列组件数组, 需要memoized
+  // <Action>.props: {record, match}
   // match: https://reacttraining.com/react-router/web/api/match
   actions: arrayOf(func),
 
-  // 工具栏(左)组件数组, (match) => <Component>
+  // 工具栏(左)组件数组
+  // <Tool>.props: {match, selectedRecords, records}
   tools: arrayOf(func),
 
   // 默认日期解析格式串
   defaultDateParsePattern: string,
   // 默认日期显示格式串
   defaultDateFormatPattern: string,
+
+  // TODO rowDnd
 };
 
 export default TablePropTypes;

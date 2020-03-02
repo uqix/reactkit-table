@@ -2,9 +2,9 @@
 import { jsx } from '@emotion/core';
 import DateFnsUtils from '@date-io/date-fns';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import {Fragment} from 'react';
+import {Fragment, useState} from 'react';
 import _ from 'lodash';
-import { isAfter, format } from 'date-fns';
+import { isAfter, format, isValid } from 'date-fns';
 import { dayOf } from './dateFilter';
 import zhCnLocale from "date-fns/locale/zh-CN";
 
@@ -26,7 +26,7 @@ export default function DateColumnFilter({column, advancedModeEnabled}) {
              label={`${Header}(从)`}
              value={fromDate || null}
              onChange={value =>
-               setFilter(rangeOf(patchValue(value), toDate))
+               setFilter(rangeOf(value, toDate))
              }
              error={rangeInvalid}
            />
@@ -34,7 +34,7 @@ export default function DateColumnFilter({column, advancedModeEnabled}) {
              label={`${Header}(到)`}
              value={toDate || null}
              onChange={value =>
-               setFilter(rangeOf(fromDate, patchValue(value)))
+               setFilter(rangeOf(fromDate, value))
              }
              error={rangeInvalid}
            />
@@ -46,7 +46,7 @@ export default function DateColumnFilter({column, advancedModeEnabled}) {
            label={Header}
            value={fromDate || null}
            onChange={value =>
-             setFilter(patchValue(value) || undefined)
+             setFilter(value || undefined)
            }
          />
        )
@@ -64,6 +64,7 @@ function rangeOf(from, to) {
 }
 
 function DatePicker(props) {
+  const [error, setError] = useState();
   return (
     <KeyboardDatePicker
       disableToolbar
@@ -71,15 +72,19 @@ function DatePicker(props) {
       format="yyyy-MM-dd"
       autoOk
       {...props}
+      onChange={value => {
+        const valueInvalid = value && !isValid(value);
+        setError(valueInvalid);
+        if (!valueInvalid) {
+          if (value) {
+            value.toJSON = function() {
+              return format(this, "yyyy-MM-dd");
+            };
+          }
+          props.onChange(value);
+        }
+      }}
+      error={error || props.error}
     />
   );
-}
-
-function patchValue(value) {
-  if (value) {
-    value.toJSON = function() {
-      return format(this, "yyyy-MM-dd");
-    };
-  }
-  return value;
 }
