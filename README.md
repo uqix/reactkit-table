@@ -13,18 +13,47 @@ npm install --save reactkit-table
 ## Usage
 
 ```jsx
-import React, { Component } from 'react'
+import React from 'react';
+import Table from 'reactkit-table';
 
-import MyComponent from 'reactkit-table'
+export default function SomeList() {
+  const records = useMemo(() =>
+    [
+      // ...
+    ],
+    []
+  );
 
-class Example extends Component {
-  render () {
-    return (
-      <MyComponent />
-    )
-  }
-}
-```
+  const columns = useMemo(() =>
+    [
+      // ...
+    ],
+    []
+  );
+
+  const actions = useMemo(() =>
+    [
+      // ...
+    ],
+    []
+  );
+
+  const tools = useMemo(() =>
+    [
+      // ...
+    ],
+    []
+  );
+
+  return (
+    <Table
+      columns={columns}
+      records={records}
+      actions={actions}
+      tools={tools}
+    />
+  );
+}```
 
 ## License
 
