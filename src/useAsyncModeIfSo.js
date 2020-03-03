@@ -106,10 +106,10 @@ export default function useAsyncModeIfSo(
 function buildQueryColumnFilters(headerGroups) {
   return _.sortBy(
     getColumnFilters(headerGroups)
-      .map(({id, filterValue, xFilterType}) => (
+      .map(({id, filterValue, xFilter}) => (
         {
           id,
-          type: xFilterType,
+          type: xFilter,
           value: filterValue === undefined ? null : filterValue,
         }
       )),

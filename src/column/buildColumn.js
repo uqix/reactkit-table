@@ -69,7 +69,7 @@ export default function buildColumn(
       Cell,
       disableFilters: !filter,
       ...availableColumnFilters[filter],
-      xFilterType: filter,
+      xFilter: filter,
       xOptions: options,
       xCss: css,
       xFormat: format,
