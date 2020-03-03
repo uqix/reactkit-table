@@ -17,32 +17,31 @@ import React from 'react';
 import Table from 'reactkit-table';
 
 export default function SomeList() {
-  const records = useMemo(() =>
-    [
+  const records = useMemo(
+    () => [
       // ...
     ],
     []
   );
 
-  const columns = useMemo(() =>
-    [
+  const columns = useMemo(
+    () => [
       // ...
     ],
     []
   );
 
-  const actions = useMemo(() =>
-    [
+  const actions = useMemo(
+    () => [
       // ...
     ],
     []
   );
 
-  const tools = useMemo(() =>
-    [
+  const tools = useMemo(
+    () => [
       // ...
     ],
-    []
   );
 
   return (

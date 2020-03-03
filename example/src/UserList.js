@@ -8,7 +8,88 @@ const {DetailsAction, editAction, deleteAction} = actions;
 const {AddTool} = tools;
 
 export default function UserList() {
-  const records = [
+  const records = useMemo(
+    () => getAllUsers(),
+    []
+  );
+
+  const columns = useMemo(
+    () => [
+      {
+        label: '帐号',
+        name: 'username',
+      },
+      {
+        label: '启用?',
+        name: record => record.enabled ? '启用' : '禁用',
+      },
+      {
+        id: 'role',
+        label: '角色',
+        name: record => record.role.name,
+        filter: 'select',
+      },
+      {
+        label: '姓名',
+        name: 'name',
+      },
+      {
+        label: '性别',
+        name: record => ({MALE: '男', FEMALE: '女'})[record.gender],
+      },
+      {
+        label: '电话',
+        name: 'phoneNumber',
+      },
+      {
+        label: '创建时间',
+        name: 'createDate',
+        type: 'date',
+        parse: true,
+      },
+      {
+        label: '更新时间',
+        name: 'updateDate',
+        type: 'date',
+        parse: true,
+      },
+    ],
+    []
+  );
+
+  const actions = useMemo(
+    () => [
+      DetailsAction,
+      editAction(({record: {id}}) => ({disabled: id === 1})),
+      deleteAction(({record: {id}}) => ({disabled: id === 1})),
+    ],
+    []
+  );
+
+  const tools = useMemo(
+    () => [
+      AddTool,
+    ],
+    []
+  );
+
+  return (
+    <Fragment>
+      <h2>用户管理</h2>
+      <Paper>
+        <Table
+          columns={columns}
+          records={records}
+          actions={actions}
+          tools={tools}
+        />
+      </Paper>
+    </Fragment>
+  );
+}
+
+function getAllUsers() {
+  return [
     {
       "id": 1000,
       "username": "1",
@@ -202,78 +283,4 @@ export default function UserList() {
       }
     }
   ];
-
-  const columns = useMemo(() =>
-    [
-      {
-        label: '帐号',
-        name: 'username',
-      },
-      {
-        label: '启用?',
-        name: record => record.enabled ? '启用' : '禁用',
-      },
-      {
-        id: 'role',
-        label: '角色',
-        name: record => record.role.name,
-        filter: 'select',
-      },
-      {
-        label: '姓名',
-        name: 'name',
-      },
-      {
-        label: '性别',
-        name: record => ({MALE: '男', FEMALE: '女'})[record.gender],
-      },
-      {
-        label: '电话',
-        name: 'phoneNumber',
-      },
-      {
-        label: '创建时间',
-        name: 'createDate',
-        type: 'date',
-        parse: true,
-      },
-      {
-        label: '更新时间',
-        name: 'updateDate',
-        type: 'date',
-        parse: true,
-      },
-    ],
-    []
-  );
-
-  const actions = useMemo(() =>
-    [
-      DetailsAction,
-      editAction(({record: {id}}) => ({disabled: id === 1})),
-      deleteAction(({record: {id}}) => ({disabled: id === 1})),
-    ],
-    []
-  );
-
-  const tools = useMemo(() =>
-    [
-      AddTool,
-    ],
-    []
-  );
-
-  return (
-    <Fragment>
-      <h2>用户管理</h2>
-      <Paper>
-        <Table
-          columns={columns}
-          records={records}
-          actions={actions}
-          tools={tools}
-        />
-      </Paper>
-    </Fragment>
-  );
 }
