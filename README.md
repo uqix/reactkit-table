@@ -30,7 +30,8 @@ export default function SomeList() {
       tools={tools}
     />
   );
-}```
+}
+```
 
 ## License
 
