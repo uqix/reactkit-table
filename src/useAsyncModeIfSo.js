@@ -19,7 +19,9 @@ export default function useAsyncModeIfSo(
   const [expectedQueryId, setExpectedQueryId] = useState(0);
 
   if (asyncMode) {
-    globalFilterProps.preGlobalFilteredRows = null;
+    if (globalFilterProps) {
+      globalFilterProps.preGlobalFilteredRows = null;
+    }
 
     const query = records.fromQuery || {};
     console.debug('Query id: current', query.id, ', expected', expectedQueryId);

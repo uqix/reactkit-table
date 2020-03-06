@@ -35,6 +35,8 @@ export default function Table(props) {
     defaultDateFormatPattern = defaultDateParsePattern,
 
     rowDnd,
+
+    disableGlobalFilter,
   } = props;
 
   if (queryRecords && rowDnd) {
@@ -49,6 +51,7 @@ export default function Table(props) {
   );
 
   const rowExpandEnabled = !!(recordParentIdKey || recordChildrenKey);
+  const globalFilterEnabled = !disableGlobalFilter;
 
   const _columns = useMemo(
     () => adaptColumns(
@@ -113,7 +116,7 @@ export default function Table(props) {
     },
     ...[
       useFilters,
-      useGlobalFilter,
+      globalFilterEnabled && useGlobalFilter,
       rowExpandEnabled && useExpanded,
       usePagination,
       useRowSelect,
@@ -139,10 +142,10 @@ export default function Table(props) {
     selectedFlatRows,
   } = table;
 
-  const globalFilterProps = {
+  const globalFilterProps = globalFilterEnabled && {
     preGlobalFilteredRows,
     setGlobalFilter,
-    globalFilter
+    globalFilter,
   };
 
   const paginationProps = {
@@ -235,8 +238,8 @@ function buildFilters(headerGroups, globalFilterProps) {
         <f.type key={i} {...f.props} />
       )),
 
-    <GlobalFilter key='G' {...globalFilterProps} />
-  ]
+    globalFilterProps && <GlobalFilter key='G' {...globalFilterProps} />
+  ].filter(f => f);
 }
 
 function buildManualOptions(asyncMode) {

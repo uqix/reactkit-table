@@ -158,6 +158,9 @@ display in UI
   defaultDateFormatPattern: string,
 
   // TODO rowDnd
+
+  // 禁用globalFilter吗?
+  disableGlobalFilter: bool,
 };
 
 export default TablePropTypes;
