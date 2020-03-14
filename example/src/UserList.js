@@ -16,30 +16,40 @@ export default function UserList() {
   const columns = useMemo(
     () => [
       {
-        label: '帐号',
-        name: 'username',
+        label: '帐户',
+        children: [
+          {
+            label: '帐号',
+            name: 'username',
+          },
+          {
+            label: '启用?',
+            name: record => record.enabled ? '启用' : '禁用',
+          },
+          {
+            id: 'role',
+            label: '角色',
+            name: record => record.role.name,
+            filter: 'select',
+          },
+        ],
       },
       {
-        label: '启用?',
-        name: record => record.enabled ? '启用' : '禁用',
-      },
-      {
-        id: 'role',
-        label: '角色',
-        name: record => record.role.name,
-        filter: 'select',
-      },
-      {
-        label: '姓名',
-        name: 'name',
-      },
-      {
-        label: '性别',
-        name: record => ({MALE: '男', FEMALE: '女'})[record.gender],
-      },
-      {
-        label: '电话',
-        name: 'phoneNumber',
+        label: '个人信息',
+        children: [
+          {
+            label: '姓名',
+            name: 'name',
+          },
+          {
+            label: '性别',
+            name: record => ({MALE: '男', FEMALE: '女'})[record.gender],
+          },
+          {
+            label: '电话',
+            name: 'phoneNumber',
+          },
+        ],
       },
       {
         label: '创建时间',
