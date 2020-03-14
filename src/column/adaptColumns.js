@@ -6,31 +6,13 @@ import { IconButton } from '@material-ui/core';
 import { Fragment } from 'react';
 import buildColumn from './buildColumn';
 import rowSelectColumn from './rowSelectColumn';
+import rowNumColumn from './rowNumColumn';
 
 export default function adaptColumns(columns, actions = [], rest) {
   const {rowExpandEnabled, recordNameKey} = rest;
   return [
     rowSelectColumn,
-
-    {
-      id: '_rowNum',
-      label: '#',
-      render: ({_rtCellProps: {cell, xDragRef}}) => (
-        <span
-          css={css`
-color: gray;
-cursor: ${xDragRef ? 'move' : 'auto'};
-              `}
-          ref={xDragRef}
-        >
-          {cell.row.index + 1}
-        </span>
-      ),
-      css: (css`
-width: 20px;
-padding: 8px 0 !important;
-            `),
-    },
+    rowNumColumn,
 
     rowExpandEnabled && {
       id: '_rowExpand',
