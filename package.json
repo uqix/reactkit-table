@@ -1,6 +1,6 @@
 {
   "name": "reactkit-table",
-  "version": "1.0.6-alpha.5",
+  "version": "1.0.6",
   "description": "An easy-to-use semantic-based Table React component using react-table and material-ui",
   "author": "uqix",
   "license": "MIT",
