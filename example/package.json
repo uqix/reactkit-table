@@ -10,13 +10,14 @@
     "@material-ui/icons": "^4.5.1",
     "emotion-theming": "^10.0.19",
     "prop-types": "15.7.2",
-    "react": "file:../node_modules/react",
+    "react": "^16.11.0",
     "react-dnd": "^10.0.2",
     "react-dnd-html5-backend": "^10.0.2",
     "react-dom": "^16.11.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^1.1.4",
-    "reactkit-table": "file:.."
+    "react-table": "^7.0.0-rc.16",
+    "reactkit-table": "latest"
   },
   "scripts": {
     "start": "react-scripts start",
