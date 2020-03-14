@@ -1,28 +1,16 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
-import RowSelectCheckbox from './RowSelectCheckbox';
 import actionCell from './actionCell';
 import { IconButton } from '@material-ui/core';
 import { Fragment } from 'react';
 import buildColumn from './buildColumn';
+import rowSelectColumn from './rowSelectColumn';
 
 export default function adaptColumns(columns, actions = [], rest) {
   const {rowExpandEnabled, recordNameKey} = rest;
   return [
-    {
-      id: '_rowSelect',
-      label: ({_rtHeaderProps: {getToggleAllRowsSelectedProps}}) => (
-        <RowSelectCheckbox {...getToggleAllRowsSelectedProps()} />
-      ),
-      render: ({_rtCellProps: {row: {getToggleRowSelectedProps}}}) => (
-        <RowSelectCheckbox {...getToggleRowSelectedProps()} />
-      ),
-      css: (css`
-width: 40px;
-padding: 4px !important;
-      `),
-    },
+    rowSelectColumn,
 
     {
       id: '_rowNum',
