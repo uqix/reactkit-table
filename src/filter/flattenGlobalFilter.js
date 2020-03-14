@@ -9,10 +9,9 @@ export default function flattenGlobalFilter(columnFormats) {
           return false;
         }
         const value = format(r.values[id]);
-        return String(value).toLowerCase()
-          .includes(
-            String(filterValue).toLowerCase()
-          );
+        return value !== undefined
+          && value !== null
+          && String(value).toLowerCase().includes(String(filterValue).toLowerCase());
       })
     );
   });
