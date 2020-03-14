@@ -88,14 +88,11 @@ export default function Table(props) {
   );
 
   const columnFormats = useMemo(
-    () => _columns
-      .filter(c => c.xFormat)
-      .reduce(
-        (pre, cur) => ({...pre,  [cur.id]: cur.xFormat}),
-        {}
-      ),
+    () => buildColumnFormats(_columns),
     [_columns]
   );
+
+  console.debug('useTable with columns', _columns);
 
   const table = useTable(
     {
@@ -119,8 +116,11 @@ export default function Table(props) {
     getTableProps,
     headerGroups,
     getTableBodyProps,
+
     rows: totalRows,
     prepareRow,
+
+    visibleColumns,
 
     preGlobalFilteredRows,
     setGlobalFilter,
@@ -163,7 +163,7 @@ export default function Table(props) {
     <Fragment>
       <TableToolbar
         tools={tools}
-        filters={buildFilters(headerGroups, globalFilterProps)}
+        filters={buildFilters(visibleColumns, globalFilterProps)}
         selectedRecords={selectedFlatRows.map(r => r.original)}
         records={records}
         rowDnd={rowDnd}
@@ -222,9 +222,9 @@ export default function Table(props) {
   );
 }
 
-function buildFilters(headerGroups, globalFilterProps) {
+function buildFilters(visibleColumns, globalFilterProps) {
   return [
-    ...getColumnFilters(headerGroups)
+    ...getColumnFilters(visibleColumns)
       .map(h => h.render('Filter'))
       .map((f, i) => (
         <f.type key={i} {...f.props} />
@@ -259,4 +259,25 @@ function flatToTree(records, getRowId, parentIdKey) {
 
   const roots = nodes.filter(n => !n[parentIdKey]);
   return roots;
+}
+
+function buildColumnFormats(_columns) {
+  return collectLeafColumns(_columns)
+    .reduce(
+      (pre, cur) => ({...pre,  [cur.id]: cur.xFormat}),
+      {}
+    );
+}
+
+function collectLeafColumns(_columns) {
+  return _columns
+    .map(c =>
+      c.columns
+        ? collectLeafColumns(c.columns)
+        : [c]
+    )
+    .reduce(
+      (pre, cur) => [...pre, ...cur],
+      []
+    );
 }

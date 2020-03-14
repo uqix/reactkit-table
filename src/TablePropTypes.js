@@ -1,15 +1,17 @@
 import PropTypes from 'prop-types';
 
-const {arrayOf, oneOfType, shape, oneOf, string, func, object, bool, number} = PropTypes;
+const {arrayOf, oneOfType, shape, oneOf, string, func, object, bool, number, exact} = PropTypes;
 
-const leafColumn = shape({
+const label = oneOfType([string, func]).isRequired;
+
+const leafColumn = exact({
   // 列id, 默认值造成冲突时才需要指定
   // 默认值: string name || label
   id: string,
 
   // 列名
   // 或组件: {_rtHeaderProps} => node
-  label: oneOfType([string, func]).isRequired,
+  label,
 
   // 列value的record字段名
   // 或函数: record => value
@@ -101,9 +103,24 @@ const leafColumn = shape({
   ]),
 });
 
+const _parentColumn = {
+  label,
+};
+
+const parentColumn = exact(_parentColumn);
+
+_parentColumn.
+  children = oneOfType([
+    arrayOf(parentColumn),
+    arrayOf(leafColumn),
+  ]).isRequired;
+
 const TablePropTypes = {
   // 列定义数组, 需要memoized
-  columns: arrayOf(leafColumn).isRequired,
+  columns: arrayOf(oneOfType([
+    parentColumn,
+    leafColumn
+  ])).isRequired,
 
   // 查询数据函数, 将开启async模式(即服务端过滤和分页)
   // query => 调API

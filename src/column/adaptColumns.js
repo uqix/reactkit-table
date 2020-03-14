@@ -19,7 +19,24 @@ export default function adaptColumns(columns, actions = [], rest) {
     .map(c => adaptColumn(c, rest));
 }
 
-function adaptColumn(
+function adaptColumn(column, rest) {
+  const {label, children} = column;
+  if (children) {
+    // TODO labelToHeader
+    const Header = (
+      typeof label === 'string'
+        ? label
+        : _rtHeaderProps => label({_rtHeaderProps})
+    );
+    return {
+      Header,
+      columns: children.map(c => adaptColumn(c, rest)),
+    };
+  }
+  return adaptLeafColumn(column, rest);
+}
+
+function adaptLeafColumn(
   {
     id, label, name,
     type = 'string', parse,
@@ -74,7 +91,9 @@ function adaptColumn(
   );
 
   id = id || (
-    _.isString(name) ? name : label
+    _.isString(name)
+      ? name
+      : (typeof label === 'string' ? label : undefined)
   );
 
   const accessor = name && (
