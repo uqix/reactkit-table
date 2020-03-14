@@ -102,6 +102,8 @@ const leafColumn = exact({
       name: string.isRequired
     })),
   ]),
+
+  // TODO css
 });
 
 const _parentColumn = {

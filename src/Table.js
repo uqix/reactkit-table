@@ -181,14 +181,26 @@ export default function Table(props) {
         <TableHead>
           {headerGroups.map(g => (
             <MrTableRow {...g.getHeaderGroupProps()}>
-              {g.headers.map(h => (
-                <TableCell
-                  css={h.xCss}
-                  {...h.getHeaderProps()}
-                >
-                  {h.render('Header')}
-                </TableCell>
-              ))}
+              {g.headers.map(h => {
+                const isParent = !!h.headers;
+                return (
+                  <TableCell
+                    css={isParent
+                         ? css`
+background-color: #f5f8fa;
+&:not(:last-child) {
+  border-right: 1px solid #e1e8ed;
+}
+                           `
+                         : h.xCss
+                        }
+                    {...h.getHeaderProps()}
+                    align={isParent ? 'center' : 'left'}
+                  >
+                    {h.render('Header')}
+                  </TableCell>
+                );
+              })}
             </MrTableRow>
           ))}
         </TableHead>
