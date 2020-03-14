@@ -7,13 +7,12 @@ export default function actionColumn(actions) {
   return {
     id: '_actions',
     label: '操作',
-    name: row => row,
     render: actionCell(actions),
   };
 }
 
 function actionCell(actions) {
-  return function ActionCell({value: record}) {
+  return function ActionCell({record}) {
     const match = useRouteMatch();
     return (
       <Fragment>

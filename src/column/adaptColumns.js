@@ -84,9 +84,14 @@ function adaptColumn(
   );
 
   const Cell = _rtCellProps => {
-    const {cell: {value}} = _rtCellProps;
+    const {
+      cell: {value},
+      row: {original: record},
+    } = _rtCellProps;
+
     return render({
       value: format(value),
+      record,
       _rtCellProps,
     })
   };

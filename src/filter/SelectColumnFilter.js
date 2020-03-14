@@ -4,7 +4,15 @@ import React from 'react';
 import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 
 export default function SelectColumnFilter({column}) {
-  const {filterValue, setFilter, preFilteredRows = [], id, Header} = column;
+  const {
+    filterValue,
+    setFilter,
+    preFilteredRows = [],
+    id,
+    Header,
+    xFormat,
+  } = column;
+
   let options = column.xOptions;
 
   options = React.useMemo(
@@ -47,7 +55,7 @@ export default function SelectColumnFilter({column}) {
 
         {options.map(({id, name}, i) =>
           <MenuItem key={i} value={id}>
-            {column.Cell({cell: {value: name}})}
+            {xFormat(name)}
           </MenuItem>
         )}
       </Select>

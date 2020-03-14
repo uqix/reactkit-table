@@ -43,7 +43,7 @@ const TablePropTypes = {
     format: oneOfType([string, func]),
 
     // 显示值时需要进一步组件化吗?
-    // {value, _rtCellProps} => node
+    // {value, record, _rtCellProps} => node
     // 默认值: {value} => value
     // 典型场景: 加样式
     render: func,
@@ -55,9 +55,10 @@ Cell render pipeline:
     <name> ->
   value in record
     [parse] ->
+
   value in row
     [format] ->
-  value for user and global filter
+  value to render
 ]
   [render] ->
 display in UI
