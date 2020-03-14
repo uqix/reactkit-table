@@ -175,6 +175,9 @@ export default function Table(props) {
 .MuiTableCell-head {
   font-weight: bold;
 }
+tbody tr:hover {
+  background-color: #f5f8fa;
+}
             `}
         {...getTableProps()}
       >
