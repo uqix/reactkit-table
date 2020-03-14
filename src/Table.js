@@ -43,13 +43,6 @@ export default function Table(props) {
     throw new Error('Must not useRowDnd in async mode(queryRecords)');
   }
 
-  const defaultColumn = useMemo(
-    () => ({
-      disableFilters: true, // for #id and action columns
-    }),
-    []
-  );
-
   const rowExpandEnabled = !!(recordParentIdKey || recordChildrenKey);
   const globalFilterEnabled = !disableGlobalFilter;
 
@@ -110,7 +103,6 @@ export default function Table(props) {
       data,
       getRowId,
       getSubRows: recordChildrenKey && getSubRows,
-      defaultColumn,
       ...buildManualOptions(Boolean(queryRecords)),
       globalFilter: flattenGlobalFilter(columnFormats),
     },
