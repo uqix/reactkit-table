@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import _ from 'lodash';
-import {getColumnFilters} from './util';
 
 export default function useAsyncModeIfSo(
   queryRecords,
   records,
   {
-    headerGroups,
+    visibleColumns,
     state: {globalFilter},
     state: {pageIndex, pageSize},
     gotoPage,
@@ -15,7 +14,7 @@ export default function useAsyncModeIfSo(
   paginationProps
 ) {
   const asyncMode = Boolean(queryRecords);
-  const queryColumnFilters = JSON.stringify(buildQueryColumnFilters(headerGroups));
+  const queryColumnFilters = JSON.stringify(buildQueryColumnFilters(visibleColumns));
   const [expectedQueryId, setExpectedQueryId] = useState(0);
 
   if (asyncMode) {
@@ -105,9 +104,9 @@ export default function useAsyncModeIfSo(
   );
 }
 
-function buildQueryColumnFilters(headerGroups) {
+function buildQueryColumnFilters(visibleColumns) {
   return _.sortBy(
-    getColumnFilters(headerGroups)
+    visibleColumns.filter(c => !c.disableFilters)
       .map(({id, filterValue, xFilter}) => (
         {
           id,

@@ -12,7 +12,6 @@ import TableRow from './TableRow';
 import flattenGlobalFilter from './filter/flattenGlobalFilter';
 import adaptColumns from './column/adaptColumns';
 import useAsyncModeIfSo from './useAsyncModeIfSo';
-import {getColumnFilters} from './util';
 
 Table.propTypes = TablePropTypes;
 
@@ -224,7 +223,7 @@ export default function Table(props) {
 
 function buildFilters(visibleColumns, globalFilterProps) {
   return [
-    ...getColumnFilters(visibleColumns)
+    ...visibleColumns.filter(c => !c.disableFilters)
       .map(h => h.render('Filter'))
       .map((f, i) => (
         <f.type key={i} {...f.props} />
