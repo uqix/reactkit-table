@@ -3,7 +3,7 @@ import { jsx } from '@emotion/core';
 import { Fragment } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 
-const actionCell = actions => function ActionCell({cell: {value: record}}) {
+const actionCell = actions => function ActionCell({value: record}) {
   const match = useRouteMatch();
   return (
     <Fragment>

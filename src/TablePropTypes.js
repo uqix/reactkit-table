@@ -10,11 +10,12 @@ const TablePropTypes = {
     id: string,
 
     // 列名
-    label: string.isRequired,
+    // 或组件: {_rtHeaderProps} => node
+    label: oneOfType([string, func]).isRequired,
 
     // 列value的record字段名
     // 或函数: record => value
-    name: oneOfType([string, func]).isRequired,
+    name: oneOfType([string, func]),
 
     // 列数据类型
     // 注意: bool一般自定义name函数转为业务string配合select filter使用
@@ -42,20 +43,22 @@ const TablePropTypes = {
     format: oneOfType([string, func]),
 
     // 显示值时需要进一步组件化吗?
-    // {value} => node
+    // {value, _rtCellProps} => node
     // 默认值: {value} => value
     // 典型场景: 加样式
     render: func,
 
     /*
-从record中的值到显示在界面上的转化流程:
-record
-  [name] ->
-value in record
-  [parse] ->
-value in row
-  [format] ->
-value for user and global filter
+Cell render pipeline:
+[
+  record
+    <name> ->
+  value in record
+    [parse] ->
+  value in row
+    [format] ->
+  value for user and global filter
+]
   [render] ->
 display in UI
      */

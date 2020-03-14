@@ -50,21 +50,35 @@ export default function buildColumn(
   format = format || (value => value);
   render = render || (({value}) => value);
 
-  const accessor = (
+  const Header = (
+    typeof label === 'string'
+      ? label
+      : _rtHeaderProps => label({_rtHeaderProps})
+  );
+
+  id = id || (
+    _.isString(name) ? name : label
+  );
+
+  const accessor = name && (
     typeof name === 'string'
       ? record => parse(record[name])
       : record => parse(name(record))
   );
 
-  const Cell = ({cell: {value}}) => (
-    render({value: format(value)})
-  );
+  const Cell = _rtCellProps => {
+    const {cell: {value}} = _rtCellProps;
+    return render({
+      value: format(value),
+      _rtCellProps,
+    })
+  };
 
   return _.omitBy(
     {
       // TODO sub columns recursively
-      Header: label,
-      id: id || (_.isString(name) ? name : label),
+      Header,
+      id,
       accessor,
       Cell,
       disableFilters: !filter,

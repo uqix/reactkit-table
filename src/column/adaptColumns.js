@@ -12,13 +12,13 @@ export default function adaptColumns(columns, actions = [], rest) {
   return [
     {
       id: '_rowSelect',
-      Header: ({getToggleAllRowsSelectedProps}) => (
+      label: ({_rtHeaderProps: {getToggleAllRowsSelectedProps}}) => (
         <RowSelectCheckbox {...getToggleAllRowsSelectedProps()} />
       ),
-      Cell: ({row: {getToggleRowSelectedProps}}) => (
+      render: ({_rtCellProps: {row: {getToggleRowSelectedProps}}}) => (
         <RowSelectCheckbox {...getToggleRowSelectedProps()} />
       ),
-      xCss: (css`
+      css: (css`
 width: 40px;
 padding: 4px !important;
       `),
@@ -26,8 +26,8 @@ padding: 4px !important;
 
     {
       id: '_rowNum',
-      Header: '#',
-      Cell: ({cell, xDragRef}) => (
+      label: '#',
+      render: ({_rtCellProps: {cell, xDragRef}}) => (
         <span
           css={css`
 color: gray;
@@ -38,7 +38,7 @@ cursor: ${xDragRef ? 'move' : 'auto'};
           {cell.row.index + 1}
         </span>
       ),
-      xCss: (css`
+      css: (css`
 width: 20px;
 padding: 8px 0 !important;
             `),
@@ -46,10 +46,12 @@ padding: 8px 0 !important;
 
     rowExpandEnabled && {
       id: '_rowExpand',
-      accessor: recordNameKey,
-      Header: ({
-        getToggleAllRowsExpandedProps,
-        isAllRowsExpanded
+      name: recordNameKey,
+      label: ({
+        _rtHeaderProps: {
+          getToggleAllRowsExpandedProps,
+          isAllRowsExpanded
+        }
       }) => {
         const ToggleIcon = isAllRowsExpanded ? ExpandLess : ExpandMore;
         return (
@@ -61,14 +63,16 @@ padding: 8px 0 !important;
           </IconButton>
         );
       },
-      Cell: ({
-        cell: {value},
-        row: {
-          canExpand,
-          getToggleRowExpandedProps,
-          depth,
-          isExpanded,
-          xFlat,
+      render: ({
+        _rtCellProps: {
+          cell: {value},
+          row: {
+            canExpand,
+            getToggleRowExpandedProps,
+            depth,
+            isExpanded,
+            xFlat,
+          }
         }
       }) => {
         const ToggleIcon = isExpanded ? ExpandLess : ExpandMore;
@@ -95,17 +99,15 @@ visibility: ${canExpand ? 'visible' : 'hidden'};
       },
     },
 
-    ...columns.map(c =>
-      buildColumn(c, rest)
-    ),
+    ...columns,
 
-    ...(actions.length > 0 ? [
-      {
-        Header: '操作',
-        accessor: row => row,
-        id: '_actions',
-        Cell: actionCell(actions),
-      }
-    ] : []),
-  ].filter(c => c);
+    actions.length > 0 && {
+      id: '_actions',
+      label: '操作',
+      name: row => row,         // TODO actionCol
+      render: actionCell(actions),
+    },
+  ]
+    .filter(c => c)
+    .map(c => buildColumn(c, rest));
 }
