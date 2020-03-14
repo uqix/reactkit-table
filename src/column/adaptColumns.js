@@ -20,20 +20,29 @@ export default function adaptColumns(columns, actions = [], rest) {
 }
 
 function adaptColumn(column, rest) {
-  const {label, children} = column;
+  const {id, label, children} = column;
   if (children) {
-    // TODO labelToHeader
-    const Header = (
-      typeof label === 'string'
-        ? label
-        : _rtHeaderProps => label({_rtHeaderProps})
-    );
     return {
-      Header,
+      id: idOrDefault(id, undefined, label),
+      Header: labelToHeader(label),
       columns: children.map(c => adaptColumn(c, rest)),
     };
   }
   return adaptLeafColumn(column, rest);
+}
+
+function idOrDefault(id, name, label) {
+  return id || (
+    _.isString(name)
+      ? name
+      : (typeof label === 'string' ? label : undefined)
+  );
+}
+
+function labelToHeader(label) {
+  return typeof label === 'string'
+    ? label
+    : _rtHeaderProps => label({_rtHeaderProps});
 }
 
 function adaptLeafColumn(
@@ -84,18 +93,6 @@ function adaptLeafColumn(
   format = format || (value => value);
   render = render || (({value}) => value);
 
-  const Header = (
-    typeof label === 'string'
-      ? label
-      : _rtHeaderProps => label({_rtHeaderProps})
-  );
-
-  id = id || (
-    _.isString(name)
-      ? name
-      : (typeof label === 'string' ? label : undefined)
-  );
-
   const accessor = name && (
     typeof name === 'string'
       ? record => parse(record[name])
@@ -117,9 +114,8 @@ function adaptLeafColumn(
 
   return _.omitBy(
     {
-      // TODO sub columns recursively
-      Header,
-      id,
+      id: idOrDefault(id, name, label),
+      Header: labelToHeader(label),
       accessor,
       Cell,
       disableFilters: !filter,

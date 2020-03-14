@@ -2,12 +2,13 @@ import PropTypes from 'prop-types';
 
 const {arrayOf, oneOfType, shape, oneOf, string, func, object, bool, number, exact} = PropTypes;
 
+const id = string;
 const label = oneOfType([string, func]).isRequired;
 
 const leafColumn = exact({
   // 列id, 默认值造成冲突时才需要指定
   // 默认值: string name || label
-  id: string,
+  id,
 
   // 列名
   // 或组件: {_rtHeaderProps} => node
@@ -104,6 +105,7 @@ const leafColumn = exact({
 });
 
 const _parentColumn = {
+  id,
   label,
 };
 
