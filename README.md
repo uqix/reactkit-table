@@ -12,6 +12,8 @@ npm install --save reactkit-table
 
 ## Usage
 
+[Open example in codesandbox](https://codesandbox.io/s/github/uqix/reactkit-table/tree/master/example)
+
 ```jsx
 import React from 'react';
 import Table from 'reactkit-table';
