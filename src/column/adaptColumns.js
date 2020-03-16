@@ -60,17 +60,17 @@ function adaptLeafColumn(
 ) {
   if (type === 'date') {
     if (parse === true) {
-      parse = value => parseDate(value, defaultDateParsePattern, new Date());
+      parse = value => value && parseDate(value, defaultDateParsePattern, new Date());
     } else if (typeof parse === 'string') {
       const pattern = parse;
-      parse = value => parseDate(value, pattern, new Date());
+      parse = value => value && parseDate(value, pattern, new Date());
     }
 
     if (typeof format === 'string') {
       const pattern = format;
-      format = value => formatDate(value, pattern);
+      format = value => value && formatDate(value, pattern);
     } else if (!format) {
-      format = value => formatDate(value, defaultDateFormatPattern);
+      format = value => value && formatDate(value, defaultDateFormatPattern);
     }
 
     if (filter ===  true) {
