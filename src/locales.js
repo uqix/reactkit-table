@@ -1,5 +1,9 @@
 export const zhCN = {
   props: {
+    'reactkit-table.Table': {
+      dataLoadingText: '数据加载中...',
+    },
+
     'reactkit-table.SelectColumnFilter': {
       optionAllText: '所有',
     },

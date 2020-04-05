@@ -12,10 +12,11 @@ import Row from './Row';
 import flattenGlobalFilter from './filter/flattenGlobalFilter';
 import adaptColumns from './column/adaptColumns';
 import useAsyncModeIfSo from './useAsyncModeIfSo';
+import { withStyles } from '@material-ui/core/styles';
 
 Table.propTypes = TablePropTypes;
 
-export default function Table(props) {
+function Table(props) {
   const {
     columns,
 
@@ -36,6 +37,7 @@ export default function Table(props) {
     rowDnd,
 
     disableGlobalFilter,
+    dataLoadingText = 'Data loading...',
   } = props;
 
   if (queryRecords && rowDnd) {
@@ -226,7 +228,7 @@ background-color: #f5f8fa;
         <TableFooter>
           <TableRow>
             {paginationProps.loading
-             ? <TableCell colSpan={3}>加载中...</TableCell>
+             ? <TableCell colSpan={3}>{dataLoadingText}</TableCell>
              : <Pagination {...paginationProps} />
             }
           </TableRow>
@@ -295,3 +297,8 @@ function collectLeafColumns(_columns) {
       []
     );
 }
+
+export default withStyles(
+  {},
+  {name: 'reactkit-table.Table'}
+)(Table);
