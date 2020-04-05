@@ -1,21 +1,18 @@
 /** @jsx jsx */
 import { css, jsx } from '@emotion/core';
 import UserList from './UserList';
+import { Route } from 'react-router-dom';
 
 export default function Main() {
   return (
     <main
-      css={theme => css`
-flex-grow: 1;
-background-color: ${theme.palette.background.default};
-padding: ${theme.spacing(3)}px;
-
+      css={css`
 h2 {
-    margin-top: 0;
+  margin-top: 0;
 }
           `}
     >
-      <UserList />
+      <Route exact path='/' component={UserList} />
     </main>
   );
 }
