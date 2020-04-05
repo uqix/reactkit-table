@@ -1,11 +1,9 @@
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { jsx, css } from '@emotion/core';
 import { Fragment, useMemo } from 'react';
-import { Paper } from '@material-ui/core';
-import Table, {actions, tools} from 'reactkit-table';
-
-const {DetailsAction, editAction, deleteAction} = actions;
-const {AddTool} = tools;
+import { Paper, Button } from '@material-ui/core';
+import Table, {buttonTool} from 'reactkit-table';
+import { Add } from '@material-ui/icons';
 
 export default function UserList() {
   const records = useMemo(
@@ -16,52 +14,56 @@ export default function UserList() {
   const columns = useMemo(
     () => [
       {
-        label: '帐户',
+        label: 'Account',
         children: [
           {
-            label: '帐号',
+            label: 'Username',
             name: 'username',
           },
           {
-            label: '启用?',
-            name: record => record.enabled ? '启用' : '禁用',
-          },
-          {
             id: 'role',
-            label: '角色',
+            label: 'Role',
             name: record => record.role.name,
             filter: 'select',
+          },
+          {
+            label: 'Enabled?',
+            name: 'enabled',
+            format: value => value ? 'enabled' : 'disabled',
           },
         ],
       },
       {
-        label: '个人信息',
+        label: 'Personal Info',
         children: [
           {
-            label: '姓名',
+            label: 'Name',
             name: 'name',
           },
           {
-            label: '性别',
-            name: record => ({MALE: '男', FEMALE: '女'})[record.gender],
+            label: 'Gender',
+            name: 'gender',
+            format: value => value.charAt(0) + value.substring(1).toLowerCase(),
           },
           {
-            label: '电话',
+            label: 'Phone Number',
             name: 'phoneNumber',
           },
         ],
       },
       {
-        label: '创建时间',
+        label: 'Date Created',
         name: 'createDate',
         type: 'date',
         parse: true,
+        format: 'yyyy-MM-dd HH:mm',
       },
       {
-        label: '更新时间',
+        label: 'Date Updated',
         name: 'updateDate',
         type: 'date',
         parse: true,
+        format: 'yyyy-MM-dd HH:mm',
       },
     ],
     []
@@ -69,23 +71,34 @@ export default function UserList() {
 
   const actions = useMemo(
     () => [
-      DetailsAction,
-      editAction(({record: {id}}) => ({disabled: id === 1})),
-      deleteAction(({record: {id}}) => ({disabled: id === 1})),
+      ({record: {name, role}}) => (
+        <Button
+          css={css`min-width: 32px;`}
+          size='small'
+          onClick={() => alert(`User details: ${name}, ${role.name}`)}
+          color='primary'
+        >
+          Details
+        </Button>
+      ),
     ],
     []
   );
 
   const tools = useMemo(
     () => [
-      AddTool,
+      buttonTool(
+        'Add',
+        () => alert('Add user'),
+        {startIcon: <Add />}
+      ),
     ],
     []
   );
 
   return (
     <Fragment>
-      <h2>用户管理</h2>
+      <h2>Users</h2>
       <Paper>
         <Table
           columns={columns}

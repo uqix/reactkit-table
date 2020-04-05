@@ -17,6 +17,11 @@ import Menu from './Menu';
 
 const theme = createMuiTheme(
   {
+    typography: {
+      button: {
+        textTransform: 'none',
+      }
+    },
   },
   zhCN,
 );
