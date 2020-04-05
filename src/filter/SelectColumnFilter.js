@@ -2,8 +2,12 @@
 import { jsx, css } from '@emotion/core';
 import React from 'react';
 import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 
-export default function SelectColumnFilter({column}) {
+function SelectColumnFilter({
+  column,
+  optionAllText = 'ALL',
+}) {
   const {
     filterValue,
     setFilter,
@@ -49,7 +53,7 @@ export default function SelectColumnFilter({column}) {
         }}
       >
         <MenuItem value='' css={css`color: gray`}>
-          不限
+          {optionAllText}
         </MenuItem>
 
         {options.map(({id, name}, i) =>
@@ -61,3 +65,8 @@ export default function SelectColumnFilter({column}) {
     </FormControl>
   );
 }
+
+export default withStyles(
+  {},
+  {name: 'reactkit-table.SelectColumnFilter'}
+)(SelectColumnFilter);

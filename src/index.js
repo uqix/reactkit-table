@@ -6,6 +6,7 @@ import buttonTool from './tool/buttonTool';
 import routeTool from './tool/routeTool';
 import * as tools from './tool/tools';
 import useRowDnd from './useRowDnd';
+import * as locales from './locales';
 
 export default Table;
 
@@ -13,4 +14,5 @@ export {
   routeAction, actions,
   batchTool, buttonTool, routeTool, tools,
   useRowDnd,
+  locales,
 };

@@ -3,7 +3,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider as EmThemeProvider } from 'emotion-theming';
 import { createMuiTheme, ThemeProvider as MrThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { zhCN } from '@material-ui/core/locale';
 import { DndProvider } from 'react-dnd';
 import Html5Backend from 'react-dnd-html5-backend';
 import Main from './Main';
@@ -15,6 +14,9 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import Menu from './Menu';
 
+// import { zhCN } from '@material-ui/core/locale';
+// import {locales} from 'reactkit-table';
+
 const theme = createMuiTheme(
   {
     typography: {
@@ -23,7 +25,8 @@ const theme = createMuiTheme(
       }
     },
   },
-  zhCN,
+  // zhCN,
+  // locales.zhCN,
 );
 
 const drawerWidth = 240;
