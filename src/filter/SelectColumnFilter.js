@@ -42,12 +42,11 @@ export default function SelectColumnFilter({column}) {
       <Select
         value={
           (options.find(o => o.id === filterValue) || {})
-            .id
-            || ''
+            .id || ''
         }
-        onChange={event =>
-          setFilter(event.target.value || undefined)
-        }
+        onChange={event => {
+          setFilter(event.target.value || undefined);
+        }}
       >
         <MenuItem value='' css={css`color: gray`}>
           不限
