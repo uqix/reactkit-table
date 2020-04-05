@@ -31,6 +31,11 @@ export default function UserList() {
             label: 'Enabled?',
             name: 'enabled',
             format: value => value ? 'enabled' : 'disabled',
+            render: ({value, record: {enabled}}) => (
+              enabled
+                ? value
+                : <span css={css`color: gray;`}>{value}</span>
+            ),
           },
         ],
       },
