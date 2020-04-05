@@ -4,7 +4,7 @@ import { Table as MrTable, TableHead, TableRow as MrTableRow, TableCell, TableBo
 import { useTable, usePagination, useFilters, useGlobalFilter, useRowSelect, useExpanded } from 'react-table';
 import _ from 'lodash';
 import { Fragment, useMemo, useCallback } from 'react';
-import TableToolbar from './TableToolbar';
+import Toolbar from './Toolbar';
 import GlobalFilter from './filter/GlobalFilter';
 import TablePropTypes from './TablePropTypes';
 import TablePagination from './TablePagination';
@@ -160,7 +160,7 @@ export default function Table(props) {
 
   return (
     <Fragment>
-      <TableToolbar
+      <Toolbar
         tools={tools}
         filters={buildFilters(visibleColumns, globalFilterProps)}
         selectedRecords={selectedFlatRows.map(r => r.original)}

@@ -1,11 +1,11 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { Toolbar } from '@material-ui/core';
+import { Toolbar as MuiToolbar } from '@material-ui/core';
 import { useRouteMatch } from 'react-router-dom';
 import FilterBar from './FilterBar';
 
 // TODO memo
-export default function TableToolbar({
+export default function Toolbar({
   tools = [],
   filters,
   selectedRecords,
@@ -14,7 +14,7 @@ export default function TableToolbar({
   const match = useRouteMatch();
 
   return (
-    <Toolbar>
+    <MuiToolbar>
       <div
         css={theme => css`
 .MuiButton-root {
@@ -33,6 +33,6 @@ export default function TableToolbar({
       </div>
       <div css={css`flex-grow: 1;`} />
       <FilterBar filters={filters} />
-    </Toolbar>
+    </MuiToolbar>
   );
 }
