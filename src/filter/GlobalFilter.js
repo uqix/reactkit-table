@@ -1,15 +1,17 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { TextField } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 
-export default function GlobalFilter({
+function GlobalFilter({
   preGlobalFilteredRows,
   setGlobalFilter,
   globalFilter,
+  searchText = 'Search',
 }) {
   return (
     <TextField
-      label={`搜全局`}
+      label={searchText}
       value={globalFilter || ''}
       onChange={event =>
         setGlobalFilter(event.target.value || undefined)
@@ -17,3 +19,8 @@ export default function GlobalFilter({
     />
   );
 }
+
+export default withStyles(
+  {},
+  {name: 'reactkit-table.GlobalFilter'}
+)(GlobalFilter);
