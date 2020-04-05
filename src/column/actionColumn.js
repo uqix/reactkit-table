@@ -6,7 +6,7 @@ import { useRouteMatch } from 'react-router-dom';
 export default function actionColumn(actions) {
   return {
     id: '_actions',
-    label: '操作',
+    label: '',
     render: actionCell(actions),
   };
 }
