@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { Table as MrTable, TableHead, TableRow as MrTableRow, TableCell, TableBody, TableFooter } from '@material-ui/core';
+import { Table as MrTable, TableHead, TableRow, TableCell, TableBody, TableFooter } from '@material-ui/core';
 import { useTable, usePagination, useFilters, useGlobalFilter, useRowSelect, useExpanded } from 'react-table';
 import _ from 'lodash';
 import { Fragment, useMemo, useCallback } from 'react';
@@ -8,7 +8,7 @@ import Toolbar from './Toolbar';
 import GlobalFilter from './filter/GlobalFilter';
 import TablePropTypes from './TablePropTypes';
 import Pagination from './Pagination';
-import TableRow from './TableRow';
+import Row from './Row';
 import flattenGlobalFilter from './filter/flattenGlobalFilter';
 import adaptColumns from './column/adaptColumns';
 import useAsyncModeIfSo from './useAsyncModeIfSo';
@@ -183,7 +183,7 @@ tbody tr:hover {
       >
         <TableHead>
           {headerGroups.map(g => (
-            <MrTableRow {...g.getHeaderGroupProps()}>
+            <TableRow {...g.getHeaderGroupProps()}>
               {g.headers.map(h => {
                 const isParent = !!h.headers;
                 return (
@@ -204,7 +204,7 @@ background-color: #f5f8fa;
                   </TableCell>
                 );
               })}
-            </MrTableRow>
+            </TableRow>
           ))}
         </TableHead>
 
@@ -212,7 +212,7 @@ background-color: #f5f8fa;
           {pageRows.map(r => {
             prepareRow(r);
             return (
-              <TableRow
+              <Row
                 {...r.getRowProps()}
                 row={r}
                 rowDnd={rowDnd}
@@ -224,12 +224,12 @@ background-color: #f5f8fa;
         </TableBody>
 
         <TableFooter>
-          <MrTableRow>
+          <TableRow>
             {paginationProps.loading
              ? <TableCell colSpan={3}>加载中...</TableCell>
              : <Pagination {...paginationProps} />
             }
-          </MrTableRow>
+          </TableRow>
         </TableFooter>
       </MrTable>
     </Fragment>

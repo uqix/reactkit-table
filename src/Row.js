@@ -1,12 +1,12 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core';
-import { TableRow as MrTableRow, TableCell } from '@material-ui/core';
+import { TableRow, TableCell } from '@material-ui/core';
 import { useDrag, useDrop } from 'react-dnd';
 import React from 'react';
 
 const DND_ITEM_TYPE = 'row';
 
-export default function TableRow({
+export default function Row({
   row: {cells, index},
   rowDnd,
   records,
@@ -80,7 +80,7 @@ export default function TableRow({
   });
 
   return (
-    <MrTableRow
+    <TableRow
       ref={el => {
         preview(el);
         drop(el);
@@ -98,6 +98,6 @@ export default function TableRow({
           })}
         </TableCell>
       ))}
-    </MrTableRow>
+    </TableRow>
   );
 }
