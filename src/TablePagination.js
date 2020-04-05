@@ -1,13 +1,18 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import { TablePagination as MrTablePagination } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 
-export default function TablePagination({
+function TablePagination({
   totalRowCount,
   pageSize,
   pageIndex,
   gotoPage,
   setPageSize,
+  currentPageText = ({page, pageCount, rowFrom, rowTo, rowCount}) => (
+    `Page ${page} (${pageCount} pages, ${rowCount} rows)`
+  ),
+  noDataText = 'No data',
 }) {
   const pageCount = Math.ceil(totalRowCount / pageSize);
   return (
@@ -18,12 +23,18 @@ export default function TablePagination({
       onChangePage={(_, page) => gotoPage(page)}
       labelDisplayedRows={({from, to, count}) =>
         totalRowCount > 0
-          ? `${pageIndex+1}/${pageCount}页 · ${from}-${to}/${count}行`
-          : '无数据'
+          ? currentPageText({
+            page: pageIndex + 1,
+            pageCount,
+            rowFrom: from,
+            rowTo: to,
+            rowCount: count,
+          })
+          : noDataText
       }
-      onChangeRowsPerPage={event =>
-        setPageSize(event.target.value)
-      }
+      onChangeRowsPerPage={event => {
+        setPageSize(event.target.value);
+      }}
       rowsPerPageOptions={[
         // 3,
         10, 25, 50, 100,
@@ -32,3 +43,8 @@ export default function TablePagination({
     />
   );
 }
+
+export default withStyles(
+  {},
+  {name: 'reactkit-table.TablePagination'}
+)(TablePagination);
