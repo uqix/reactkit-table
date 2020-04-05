@@ -8,7 +8,7 @@ export const zhCN = {
       searchText: '搜索',
     },
 
-    'reactkit-table.TablePagination': {
+    'reactkit-table.Pagination': {
       currentPageText: ({page, pageCount, rowFrom, rowTo, rowCount}) => (
         `第${page}页 (${pageCount}页, ${rowCount}行)`
       ),

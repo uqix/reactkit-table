@@ -7,7 +7,7 @@ import { Fragment, useMemo, useCallback } from 'react';
 import Toolbar from './Toolbar';
 import GlobalFilter from './filter/GlobalFilter';
 import TablePropTypes from './TablePropTypes';
-import TablePagination from './TablePagination';
+import Pagination from './Pagination';
 import TableRow from './TableRow';
 import flattenGlobalFilter from './filter/flattenGlobalFilter';
 import adaptColumns from './column/adaptColumns';
@@ -227,7 +227,7 @@ background-color: #f5f8fa;
           <MrTableRow>
             {paginationProps.loading
              ? <TableCell colSpan={3}>加载中...</TableCell>
-             : <TablePagination {...paginationProps} />
+             : <Pagination {...paginationProps} />
             }
           </MrTableRow>
         </TableFooter>

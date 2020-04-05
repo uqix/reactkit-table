@@ -1,9 +1,9 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
-import { TablePagination as MrTablePagination } from '@material-ui/core';
+import { TablePagination } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
-function TablePagination({
+function Pagination({
   totalRowCount,
   pageSize,
   pageIndex,
@@ -16,7 +16,7 @@ function TablePagination({
 }) {
   const pageCount = Math.ceil(totalRowCount / pageSize);
   return (
-    <MrTablePagination
+    <TablePagination
       count={totalRowCount}
       rowsPerPage={pageSize}
       page={pageIndex}
@@ -46,5 +46,5 @@ function TablePagination({
 
 export default withStyles(
   {},
-  {name: 'reactkit-table.TablePagination'}
-)(TablePagination);
+  {name: 'reactkit-table.Pagination'}
+)(Pagination);
