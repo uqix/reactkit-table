@@ -6,7 +6,11 @@ import { useState } from 'react';
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 
-function FilterBar({filters}) {
+function FilterBar({
+  filters,
+  openAdvancedModeText = 'Open advanced mode',
+  closeAdvancedModeText = 'Close advanced mode',
+}) {
   const [advancedModeEnabled, setAdvancedModeEnabled] = useState();
   return (
     <div
@@ -19,8 +23,8 @@ function FilterBar({filters}) {
     >
       <Tooltip
         title={advancedModeEnabled
-               ? '关闭高级模式'
-               : '打开高级模式(区间)'
+               ? closeAdvancedModeText
+               : openAdvancedModeText
               }
       >
         <IconButton

@@ -14,5 +14,10 @@ export const zhCN = {
       ),
       noDataText: '无数据',
     },
+
+    'reactkit-table.FilterBar': {
+      openAdvancedModeText: '打开高级模式',
+      closeAdvancedModeText: '关闭高级模式',
+    },
   }
 };
