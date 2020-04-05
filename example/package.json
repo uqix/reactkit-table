@@ -12,6 +12,7 @@
     "@material-ui/pickers": "^3.2.8",
     "date-fns": "^2.9.0",
     "emotion-theming": "^10.0.19",
+    "faker": "^4.1.0",
     "prop-types": "15.7.2",
     "react": "^16.11.0",
     "react-dnd": "^10.0.2",

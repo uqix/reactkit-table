@@ -4,6 +4,7 @@ import { Fragment, useMemo } from 'react';
 import { Paper, Button } from '@material-ui/core';
 import Table, {buttonTool} from 'reactkit-table';
 import { Add } from '@material-ui/icons';
+import faker from 'faker';
 
 export default function UserList() {
   const records = useMemo(
@@ -43,7 +44,7 @@ export default function UserList() {
           {
             label: 'Gender',
             name: 'gender',
-            format: value => value.charAt(0) + value.substring(1).toLowerCase(),
+            format: value => value.toLowerCase(),
           },
           {
             label: 'Phone Number',
@@ -55,14 +56,6 @@ export default function UserList() {
         label: 'Date Created',
         name: 'createDate',
         type: 'date',
-        parse: true,
-        format: 'yyyy-MM-dd HH:mm',
-      },
-      {
-        label: 'Date Updated',
-        name: 'updateDate',
-        type: 'date',
-        parse: true,
         format: 'yyyy-MM-dd HH:mm',
       },
     ],
@@ -112,198 +105,31 @@ export default function UserList() {
 }
 
 function getAllUsers() {
-  return [
-    {
-      "id": 1000,
-      "username": "1",
-      "enabled": false,
-      "name": "1",
-      "gender": "MALE",
-      "phoneNumber": "1",
-      "remark": null,
-      "createDate": "2020-02-05 10:39:22",
-      "updateDate": "2020-02-08 18:28:34",
-      "role": {
-        "id": 1000,
-        "name": "test",
-        "permissions": []
-      }
-    },
-    {
-      "id": 11,
-      "username": "11",
-      "enabled": true,
-      "name": "11",
-      "gender": "MALE",
-      "phoneNumber": "2",
-      "remark": null,
-      "createDate": "2020-02-05 10:39:22",
-      "updateDate": "2020-02-07 17:03:02",
-      "role": {
-        "id": 1001,
-        "name": "没有女的",
-        "permissions": []
-      }
-    },
-    {
-      "id": 12,
-      "username": "12",
-      "enabled": false,
-      "name": "12",
-      "gender": "FEMALE",
-      "phoneNumber": "3",
-      "remark": null,
-      "createDate": "2020-02-05 10:39:22",
-      "updateDate": "2020-02-07 17:03:02",
-      "role": {
-        "id": 1,
-        "name": "系统管理员",
-        "permissions": []
-      }
-    },
-    {
-      "id": 13,
-      "username": "13",
-      "enabled": false,
-      "name": "13",
-      "gender": "FEMALE",
-      "phoneNumber": "4",
-      "remark": null,
-      "createDate": "2020-02-05 10:39:22",
-      "updateDate": "2020-02-07 17:03:02",
-      "role": {
-        "id": 1,
-        "name": "系统管理员",
-        "permissions": []
-      }
-    },
-    {
-      "id": 14,
-      "username": "14",
-      "enabled": false,
-      "name": "14",
-      "gender": "FEMALE",
-      "phoneNumber": "5",
-      "remark": null,
-      "createDate": "2020-02-05 10:39:22",
-      "updateDate": "2020-02-07 17:03:02",
-      "role": {
-        "id": 1000,
-        "name": "test",
-        "permissions": []
-      }
-    },
-    {
-      "id": 15,
-      "username": "15",
-      "enabled": false,
-      "name": "15",
-      "gender": "MALE",
-      "phoneNumber": "6",
-      "remark": null,
-      "createDate": "2020-02-05 10:39:22",
-      "updateDate": "2020-02-07 17:03:02",
-      "role": {
-        "id": 1000,
-        "name": "test",
-        "permissions": []
-      }
-    },
-    {
-      "id": 16,
-      "username": "16",
-      "enabled": false,
-      "name": "16",
-      "gender": "MALE",
-      "phoneNumber": "7",
-      "remark": null,
-      "createDate": "2020-02-05 10:39:22",
-      "updateDate": "2020-02-07 17:03:02",
-      "role": {
-        "id": 1,
-        "name": "系统管理员",
-        "permissions": []
-      }
-    },
-    {
-      "id": 17,
-      "username": "17",
-      "enabled": false,
-      "name": "17",
-      "gender": "FEMALE",
-      "phoneNumber": "8",
-      "remark": null,
-      "createDate": "2020-02-05 10:39:22",
-      "updateDate": "2020-02-07 17:03:02",
-      "role": {
-        "id": 1,
-        "name": "系统管理员",
-        "permissions": []
-      }
-    },
-    {
-      "id": 18,
-      "username": "18",
-      "enabled": false,
-      "name": "18",
-      "gender": "FEMALE",
-      "phoneNumber": "9",
-      "remark": null,
-      "createDate": "2020-02-05 10:39:22",
-      "updateDate": "2020-02-07 17:03:02",
-      "role": {
-        "id": 1000,
-        "name": "test",
-        "permissions": []
-      }
-    },
-    {
-      "id": 20,
-      "username": "20",
-      "enabled": false,
-      "name": "20",
-      "gender": "MALE",
-      "phoneNumber": null,
-      "remark": null,
-      "createDate": "2020-02-05 10:39:22",
-      "updateDate": "2020-02-07 17:03:02",
-      "role": {
-        "id": 1,
-        "name": "系统管理员",
-        "permissions": []
-      }
-    },
-    {
-      "id": 19,
-      "username": "19",
-      "enabled": false,
-      "name": "19",
-      "gender": "MALE",
-      "phoneNumber": null,
-      "remark": null,
-      "createDate": "2020-02-05 10:39:22",
-      "updateDate": "2020-02-07 17:03:02",
-      "role": {
-        "id": 1000,
-        "name": "test",
-        "permissions": []
-      }
-    },
-    {
-      "id": 1,
-      "username": "root",
-      "enabled": true,
-      "name": "根管理员",
-      "gender": "FEMALE",
-      "phoneNumber": null,
-      "remark": null,
-      "createDate": "2020-02-04 14:44:32",
-      "updateDate": "2020-02-04 14:44:32",
-      "role": {
-        "id": 1,
-        "name": "系统管理员",
-        "permissions": []
-      }
-    }
-  ];
+  const roles = getAllRoles();
+  const users = [];
+  for (let i = 0; i < 150; i++) {
+    users.push({
+      id: i + 1,
+      username: faker.internet.userName(),
+      role: faker.random.arrayElement(roles),
+      enabled: faker.random.boolean(),
+
+      name: faker.name.findName(),
+      gender: faker.random.arrayElement(['MALE', 'FEMALE']),
+      phoneNumber: faker.phone.phoneNumber(),
+      createDate: faker.date.past(),
+    });
+  }
+  return users;
+}
+
+function getAllRoles() {
+  const roles = [];
+  for (let i = 0; i < 20; i++) {
+    roles.push({
+      id: i + 1,
+      name: faker.name.jobTitle(),
+    });
+  }
+  return roles;
 }
