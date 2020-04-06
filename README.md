@@ -35,6 +35,29 @@ export default function SomeList() {
 }
 ```
 
+## API
+TODO
+
+## Dependencies
+
+| Feature           | Dependency              |
+|-------------------|-------------------------|
+| Core              | react                   |
+|                   | react-dom               |
+|                   | prop-types              |
+|                   | react-table             |
+|                   | @material-ui/core       |
+|                   | @material-ui/icons      |
+|                   | @emotion/core           |
+|                   | emotion-theming         |
+| Row DnD           | react-dnd               |
+|                   | react-dnd-html5-backend |
+| Date column       | @date-io/date-fns       |
+|                   | date-fns                |
+|                   | @material-ui/pickers    |
+| Route Action/Tool | react-router-dom        |
+
+
 ## License
 
 MIT © [uqix](https://github.com/uqix)
