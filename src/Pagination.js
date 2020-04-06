@@ -15,6 +15,8 @@ function Pagination({
   noDataText = 'No data',
 }) {
   const pageCount = Math.ceil(totalRowCount / pageSize);
+  pageIndex = pageIndex < pageCount ? pageIndex : 0;
+
   return (
     <TablePagination
       count={totalRowCount}
