@@ -44,9 +44,9 @@ export default function SomeList() {
 * Memoized
 
 ### queryRecords
-* Callback to fetch records in ___async mode___(i.e. server side filtering and pagination), `Table` works in local mode if not specified
+* Callback to fetch records in ___async mode___(i.e. server side filtering and pagination), `Table` works in ___local mode___ if not specified
 * Type: function, `query => _`
-* query
+* `query`
 ```javascript
 {
   "id": number, // query id, auto increment to ignore outdated response
@@ -64,7 +64,7 @@ export default function SomeList() {
 ```
 
 ### records
-* records to display, needs another property `fromQuery` in async mode:
+* records to display, needs another property `fromQuery` in ___async mode___:
 ```javascript
 records.fromQuery = {
   ...query,
@@ -145,18 +145,18 @@ TODO
 
 ##### type
 * Cell value type
-* Type: one Of `'string'`, `'number'`, `'date'`
+* Type: one of `'string'`, `'number'`, `'date'`
 * Default: `'string'`
 
 ##### parse
-* Parse value after `name` step to target type, used in cases: date
-* Type: `true`, parse with default format of target type | string, parse with specified format([date](https://date-fns.org/v2.9.0/docs/parse)) | function, `value => new value`
+* Parse value after `name` step to target `type`, used in cases: date
+* Type: `true`, uses default parse pattern of target `type` | string, pattern([date](https://date-fns.org/v2.9.0/docs/parse)) | function, `value => value2`
 * Default: `value => value`
 
 ##### format
 * Format value before `render` it for filtering, used in cases: date, bool
-* Type: string, format | function, `value => string`
-* Default: for date type, `value => fmt('yyyy-MM-dd HH:mm:SS')` | for bool type, TODO | for number type, TODO | for others: `value => value`
+* Type: string, pattern | function, `value => string`
+* Default: `date` and `number`, use default format pattern of target `type` | for others: `value => value`
 
 ##### render
 * Render value for display, used in cases: style
@@ -181,11 +181,11 @@ TODO
 
 ##### filter
 * How to filter this column
-* Type: `true`, filter by default filter of target type | `'text'` | `'number'` | `'date'` | `'select'`
+* Type: `true`, uses default filter type of target `type` | `'text'` | `'number'` | `'date'` | `'select'`
 * Default: no filter
 
 ##### options
-* Options for `select` type filter, used in cases: async mode, generated options from records do not fit in local mode
+* Options for `select` type filter, used in cases: ___async mode___, generated options from records do not fit in ___local mode___
 * Type: array of `{id: number/string, name: string}`, id for submit, name for display
 
 #### Parent Column
