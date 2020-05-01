@@ -149,14 +149,14 @@ TODO
 * Default: `'string'`
 
 ##### parse
-* Parse value after `name` step to target `type`, used in cases: date
-* Type: `true`, uses default parse pattern of target `type` | string, pattern([date](https://date-fns.org/v2.9.0/docs/parse)) | function, `value => value2`
+* Parse value to target `type` after `name` step, used in cases: date
+* Type: `true`, uses default parse pattern | string, pattern([date](https://date-fns.org/v2.9.0/docs/parse)) | function, `value => value2`
 * Default: `value => value`
 
 ##### format
 * Format value before `render` it for filtering, used in cases: date, bool
 * Type: string, pattern | function, `value => string`
-* Default: `date` and `number`, use default format pattern of target `type` | for others: `value => value`
+* Default: `date` and `number`, use default format pattern | for others: `value => value`
 
 ##### render
 * Render value for display, used in cases: style
@@ -181,7 +181,7 @@ TODO
 
 ##### filter
 * How to filter this column
-* Type: `true`, uses default filter type of target `type` | `'text'` | `'number'` | `'date'` | `'select'`
+* Type: `true`, uses default filter type | `'text'` | `'number'` | `'date'` | `'select'`
 * Default: no filter
 
 ##### options
