@@ -67,7 +67,7 @@ export default function SomeList() {
 * records to display, needs another property `fromQuery` in async mode:
 ```javascript
 records.fromQuery = {
-  ...Query,
+  ...query,
   "foundRowCount": number // matched rows after filtering and before pagination
 }
 ```
