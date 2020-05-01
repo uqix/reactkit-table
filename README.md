@@ -1,13 +1,13 @@
 # reactkit-table
 
-> An easy-to-use Table component using react-table and material-ui
+> A model based Table component using react-table and material-ui
 
-[![NPM](https://img.shields.io/npm/v/reactkit-table.svg)](https://www.npmjs.com/package/reactkit-table) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![NPM](https://img.shields.io/npm/v/reactkit-table.svg)](https://www.npmjs.com/package/reactkit-table)
 
 ## Install
 
 ```bash
-npm install --save reactkit-table
+npm install reactkit-table
 ```
 
 ## Usage
@@ -35,8 +35,175 @@ export default function SomeList() {
 }
 ```
 
-## API
+## Props
+
+### columns
+* Columns model
+* Type: array of `Column`
+* Required
+* Memoized
+
+### queryRecords
+* Callback to fetch records in ___async mode___(i.e. server side filtering and pagination), `Table` works in local mode if not specified
+* Type: function, `query => _`
+* query
+```javascript
+{
+  "id": number, // query id, auto increment to ignore outdated response
+  "pageIndex": number, // 0 based
+  "pageSize": number, // max rows per page
+  "globalFilter": string, // global filter value, null in clear state
+  "columnFilters": [
+    {
+      "id": string, // column id(i.e. Column.id)
+      "type": string, // column filter type(i.e. Column.filter)
+      "value": any // column filter value, null in clear state
+    },
+  ]
+}
+```
+
+### records
+* records to display, needs another property `fromQuery` in async mode:
+```javascript
+records.fromQuery = {
+  ...Query,
+  "foundRowCount": number // matched rows after filtering and before pagination
+}
+```
+
+* Type: array of object
+* Memoized
+
+### recordIdKey
+* Id property key of record
+* Type: string | function, `record => id`
+* Memoized if function specified
+* Default: `'id'`
+
+### recordNameKey
+* Name property key of record, used in cases: appended to toggle icon when ___row expand___ enabled
+* Type: string | function, `record => name`
+* Memoized if function specified
+* Default: `'name'`
+
+### recordParentIdKey
+* Parent id property key of record, used for flat tree data, ___row expand___ will be enabled if specified
+* Type: string
+
+### recordChildrenKey
+* Children property key of record, used for nested tree data, ___row expand___ will be enabled if specified
+* Type: string
+
+### actions
+* A column will be added as the last one containing specified actions(like Details, Edit, Delete)
+* Type: array of `Action` components, Action props: {record, [match](https://reacttraining.com/react-router/web/api/match)}
+* Memoized
+
+### tools
+* Tools placed at the left of toolbar(like Add, Export)
+* Type: array of `Tool` components, Tool props: {selectedRecords, records, [match](https://reacttraining.com/react-router/web/api/match)}
+* Memoized
+
+### defaultDateParsePattern
+* Type: string
+* Default: `'yyyy-MM-dd HH:mm:SS'`
+
+### defaultDateFormatPattern
+* Type: string
+* Default: `'yyyy-MM-dd HH:mm:SS'`
+
+### rowDnd
 TODO
+
+### disableGlobalFilter
+* Type: boolean
+
+### dataLoadingText
+* Type: string
+* Default: `'Data loading...'`
+
+## Models
+
+### Column
+
+#### Leaf Column
+
+##### id
+* Specify it if default results in conflict
+* Type: string
+* Default: `Column.name` with string type || `Column.label`
+
+##### label
+* Column header
+* Type: string | component, props: `{_rtHeaderProps}`
+* Required
+
+##### name
+* Cell value property key of record
+* Type: string | function, `record => value`
+
+##### type
+* Cell value type
+* Type: one Of `'string'`, `'number'`, `'date'`
+* Default: `'string'`
+
+##### parse
+* Parse value after `name` step to target type, used in cases: date
+* Type: `true`, parse with default format of target type | string, parse with specified format([date](https://date-fns.org/v2.9.0/docs/parse)) | function, `value => new value`
+* Default: `value => value`
+
+##### format
+* Format value before `render` it for filtering, used in cases: date, bool
+* Type: string, format | function, `value => string`
+* Default: for date type, `value => fmt('yyyy-MM-dd HH:mm:SS')` | for bool type, TODO | for number type, TODO | for others: `value => value`
+
+##### render
+* Render value for display, used in cases: style
+* Type: component, props: `{value, record, _rtCellProps}`
+* Default: `{value} => value`
+* Cell render pipeline
+```javascript
+  /*
+    record
+    - <name> ->
+    value in record
+    - [parse] ->
+
+    value in row
+    - [format] ->
+    value to render
+
+    - [render] ->
+    display in UI
+  */
+```
+
+##### filter
+* How to filter this column
+* Type: `true`, filter by default filter of target type | `'text'` | `'number'` | `'date'` | `'select'`
+* Default: no filter
+
+##### options
+* Options for `select` type filter, used in cases: async mode, generated options from records do not fit in local mode
+* Type: array of `{id: number/string, name: string}`, id for submit, name for display
+
+#### Parent Column
+
+##### id
+* Specify it if default results in conflict
+* Type: string
+* Default: `Column.name` with string type || `Column.label`
+
+##### label
+* Column header
+* Type: string | component, props: `{_rtHeaderProps}`
+* Required
+
+##### children
+* Sub columns
+* Type: array of `Parent Column` | array of `Leaf Column`
+* Required
 
 ## Dependencies
 
