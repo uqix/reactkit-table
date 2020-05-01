@@ -45,7 +45,7 @@ export default function SomeList() {
 
 ### queryRecords
 * Callback to fetch records in ___async mode___(i.e. server side filtering and pagination), `Table` works in ___local mode___ if not specified
-* Type: function, `query => _`
+* Type: function, `query` => _
 * `query`
 ```javascript
 {
@@ -77,13 +77,13 @@ records.fromQuery = {
 
 ### recordIdKey
 * Id property key of record
-* Type: string | function, `record => id`
+* Type: string | function, record => id
 * Memoized if function specified
 * Default: `'id'`
 
 ### recordNameKey
 * Name property key of record, used in cases: appended to toggle icon when ___row expand___ enabled
-* Type: string | function, `record => name`
+* Type: string | function, record => name
 * Memoized if function specified
 * Default: `'name'`
 
@@ -136,12 +136,12 @@ TODO
 
 ##### label
 * Column header
-* Type: string | component, props: `{_rtHeaderProps}`
+* Type: string | component, props: {_rtHeaderProps}
 * Required
 
 ##### name
 * Cell value property key of record
-* Type: string | function, `record => value`
+* Type: string | function, record => value
 
 ##### type
 * Cell value type
@@ -149,18 +149,18 @@ TODO
 * Default: `'string'`
 
 ##### parse
-* Parse value to target `type` after `name` step, used in cases: date
-* Type: `true`, uses default parse pattern | string, pattern([date](https://date-fns.org/v2.9.0/docs/parse)) | function, `value => value2`
+* Parse value to target type after name step, used in cases: date
+* Type: `true`, uses default parse pattern | string, pattern([date](https://date-fns.org/v2.9.0/docs/parse)) | function, value => value2
 * Default: `value => value`
 
 ##### format
-* Format value before `render` it for filtering, used in cases: date, bool
-* Type: string, pattern | function, `value => string`
-* Default: `date` and `number`, use default format pattern | for others: `value => value`
+* Format value before render it for filtering, used in cases: date, bool
+* Type: string, pattern | function, value => string
+* Default: using default format pattern
 
 ##### render
 * Render value for display, used in cases: style
-* Type: component, props: `{value, record, _rtCellProps}`
+* Type: component, props: {value, record, _rtCellProps}
 * Default: `{value} => value`
 * Cell render pipeline
 ```javascript
@@ -185,7 +185,7 @@ TODO
 * Default: no filter
 
 ##### options
-* Options for `select` type filter, used in cases: ___async mode___, generated options from records do not fit in ___local mode___
+* Options for select filter type, used in cases: ___async mode___, generated options from records do not fit in ___local mode___
 * Type: array of `{id: number/string, name: string}`, id for submit, name for display
 
 #### Parent Column
@@ -197,7 +197,7 @@ TODO
 
 ##### label
 * Column header
-* Type: string | component, props: `{_rtHeaderProps}`
+* Type: string | component, props: {_rtHeaderProps}
 * Required
 
 ##### children
