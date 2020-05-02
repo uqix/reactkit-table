@@ -97,12 +97,12 @@ records.fromQuery = {
 
 ### actions
 * A column will be added as the last one containing specified actions(like Details, Edit, Delete)
-* Type: array of `Action` components, Action props: {record, [match](https://reacttraining.com/react-router/web/api/match)}
+* Type: array of `Action` components, props: {record, [match](https://reacttraining.com/react-router/web/api/match)}
 * Memoized
 
 ### tools
 * Tools placed at the left of toolbar(like Add, Export)
-* Type: array of `Tool` components, Tool props: {selectedRecords, records, [match](https://reacttraining.com/react-router/web/api/match)}
+* Type: array of `Tool` components, props: {selectedRecords, records, [match](https://reacttraining.com/react-router/web/api/match)}
 * Memoized
 
 ### defaultDateParsePattern
@@ -150,11 +150,11 @@ TODO
 
 ##### parse
 * Parse value to target type after name step, used in cases: date
-* Type: `true`, uses default parse pattern | string, pattern([date](https://date-fns.org/v2.9.0/docs/parse)) | function, value => value2
+* Type: `true`, using default parse pattern | string, pattern([date](https://date-fns.org/v2.9.0/docs/parse)) | function, value => value2
 * Default: `value => value`
 
 ##### format
-* Format value before render it for filtering, used in cases: date, bool
+* Format value before render it, used in cases: date, bool, filtering
 * Type: string, pattern | function, value => string
 * Default: using default format pattern
 
@@ -162,7 +162,7 @@ TODO
 * Render value for display, used in cases: style
 * Type: component, props: {value, record, _rtCellProps}
 * Default: `{value} => value`
-* Cell render pipeline
+* Cell render pipeline:
 ```javascript
   /*
     record
@@ -181,7 +181,7 @@ TODO
 
 ##### filter
 * How to filter this column
-* Type: `true`, uses default filter type | `'text'` | `'number'` | `'date'` | `'select'`
+* Type: `true`, using default filter type | `'text'` | `'number'` | `'date'` | `'select'`
 * Default: no filter
 
 ##### options
