@@ -46,7 +46,7 @@ export default function SomeList() {
 ### queryRecords
 * Callback to fetch records in ___async mode___(i.e. server side filtering and pagination), `Table` works in ___local mode___ if not specified
 * Type: function, `query` => _
-* `query`
+* `query`:
 ```javascript
 {
   "id": number, // query id, auto increment to ignore outdated response
@@ -64,7 +64,7 @@ export default function SomeList() {
 ```
 
 ### records
-* records to display, needs another property `fromQuery` in ___async mode___:
+* Data to display, needs another property `fromQuery` in ___async mode___:
 ```javascript
 records.fromQuery = {
   ...query,
