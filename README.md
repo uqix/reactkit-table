@@ -149,17 +149,17 @@ TODO
 * Default: `'string'`
 
 ##### parse
-* Parse value to target type after name step, used in cases: date
+* How to parse value to target type after name step, used in cases: date
 * Type: `true`, using default parse pattern | string, pattern([date](https://date-fns.org/v2.9.0/docs/parse)) | function, value => value2
 * Default: `value => value`
 
 ##### format
-* Format value before render it, used in cases: date, bool, filtering
+* How to format value before render it, used in cases: date, bool, filtering
 * Type: string, pattern | function, value => string
 * Default: using default format pattern
 
 ##### render
-* Render value for display, used in cases: style
+* How to render value for display, used in cases: style
 * Type: component, props: {value, record, _rtCellProps}
 * Default: `{value} => value`
 * Cell render pipeline:
