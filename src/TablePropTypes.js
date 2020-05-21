@@ -187,6 +187,8 @@ const TablePropTypes = {
 
   // TODO rowDnd
 
+  searchText: string,
+
   // 禁用globalFilter吗?
   disableGlobalFilter: bool,
 };

@@ -123,6 +123,11 @@ TODO
 * Type: string
 * Default: `'Data loading...'`
 
+### searchText
+* The label of global filter search box
+* Type: string
+* Default: `'Search'`
+
 ## Models
 
 ### Column

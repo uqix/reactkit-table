@@ -37,7 +37,9 @@ function Table(props) {
     rowDnd,
 
     disableGlobalFilter,
+
     dataLoadingText = 'Data loading...',
+    searchText,
   } = props;
 
   if (queryRecords && rowDnd) {
@@ -139,6 +141,7 @@ function Table(props) {
     preGlobalFilteredRows,
     setGlobalFilter,
     globalFilter,
+    searchText,
   };
 
   const paginationProps = {
