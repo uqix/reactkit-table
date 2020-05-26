@@ -220,8 +220,6 @@ TODO
 |                   | react-table             |
 |                   | @material-ui/core       |
 |                   | @material-ui/icons      |
-|                   | @emotion/core           |
-|                   | emotion-theming         |
 | Row DnD           | react-dnd               |
 |                   | react-dnd-html5-backend |
 | Date column       | @date-io/date-fns       |
