@@ -1,26 +1,27 @@
-/** @jsx jsx */
-import { jsx, css } from '@emotion/core';
-import { Tooltip, IconButton } from '@material-ui/core';
+import { IconButton, Tooltip } from '@material-ui/core';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { Search } from '@material-ui/icons';
-import { useState } from 'react';
-import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import React, { useState } from 'react';
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    '& .MuiFormControl-root': {
+      marginRight: theme.spacing(1),
+      width: 150
+    }
+  },
+}));
 
 function FilterBar({
   filters,
   openAdvancedModeText = 'Open advanced mode',
   closeAdvancedModeText = 'Close advanced mode',
 }) {
+  const classes = useStyles();
   const [advancedModeEnabled, setAdvancedModeEnabled] = useState();
+
   return (
-    <div
-      css={theme => css`
-.MuiFormControl-root {
-  margin-right: ${theme.spacing(1)}px;
-  width: 150px;
-}
-          `}
-    >
+    <div className={classes.root}>
       <Tooltip
         title={advancedModeEnabled
                ? closeAdvancedModeText
@@ -34,6 +35,7 @@ function FilterBar({
           <Search />
         </IconButton>
       </Tooltip>
+
       {filters.map(f =>
         React.cloneElement(f, {advancedModeEnabled})
       )}
