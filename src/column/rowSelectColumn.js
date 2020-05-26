@@ -1,6 +1,12 @@
-/** @jsx jsx */
-import { jsx, css } from '@emotion/core';
 import { Checkbox } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
+
+const useStyles = makeStyles({
+  root: {
+    padding: 4
+  },
+});
 
 const rowSelectColumn = {
   id: '_rowSelect',
@@ -24,16 +30,19 @@ const rowSelectColumn = {
       {...getToggleRowSelectedProps()}
     />
   ),
-  css: (css`
-width: 40px;
-padding: 4px !important;
-      `),
+  // TODO
+//   css: (css`
+// width: 40px;
+// padding: 4px !important;
+//       `),
 };
 
 function RowSelectCheckbox(props) {
+  const classes = useStyles();
+
   return (
     <Checkbox
-      css={css`padding: 4px;`}
+      className={classes.root}
       size='small'
       {...props}
     />
