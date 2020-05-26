@@ -1,8 +1,17 @@
-/** @jsx jsx */
-import { jsx, css } from '@emotion/core';
-import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import { IconButton } from '@material-ui/core';
-import { Fragment } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import { ExpandLess, ExpandMore } from '@material-ui/icons';
+import React, { Fragment } from 'react';
+
+const useStyles = makeStyles({
+  icon: {
+    marginLeft: ({depth}) => depth * 16,
+    visibility: ({canExpand}) => canExpand ? 'visible' : 'hidden',
+  },
+  text: {
+    verticalAlign: 'middle',
+  },
+});
 
 export default function rowExpandColumn(recordNameKey) {
   return {
@@ -36,15 +45,14 @@ export default function rowExpandColumn(recordNameKey) {
         }
       }
     }) => {
+      const classes = useStyles({depth, canExpand});
       const ToggleIcon = isExpanded ? ExpandLess : ExpandMore;
+
       return (
         <Fragment>
           {!xFlat && (
             <IconButton
-              css={css`
-margin-left: ${depth * 16}px;
-visibility: ${canExpand ? 'visible' : 'hidden'};
-                  `}
+              className={classes.icon}
               size='small'
               {...getToggleRowExpandedProps()}
             >
@@ -52,7 +60,7 @@ visibility: ${canExpand ? 'visible' : 'hidden'};
             </IconButton>
           )}
 
-          <span css={css`vertical-align: middle;`}>
+          <span className={classes.text}>
             {value}
           </span>
         </Fragment>
