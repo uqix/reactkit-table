@@ -1,8 +1,19 @@
-/** @jsx jsx */
-import { jsx, css } from '@emotion/core';
 import { Toolbar as MuiToolbar } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import FilterBar from './FilterBar';
+
+const useStyles = makeStyles(theme => ({
+  tools: {
+    '& .MuiButton-root': {
+      marginRight: theme.spacing(2)
+    }
+  },
+  separator: {
+    flexGrow: 1
+  }
+}));
 
 // TODO memo
 export default function Toolbar({
@@ -12,16 +23,11 @@ export default function Toolbar({
   records,
 }) {
   const match = useRouteMatch();
+  const classes = useStyles();
 
   return (
     <MuiToolbar>
-      <div
-        css={theme => css`
-.MuiButton-root {
-    margin-right: ${theme.spacing(2)}px;
-}
-            `}
-      >
+      <div className={classes.tools}>
         {tools.map((Tool, i) =>
           <Tool
             key={i}
@@ -31,7 +37,7 @@ export default function Toolbar({
           />
         )}
       </div>
-      <div css={css`flex-grow: 1;`} />
+      <div className={classes.separator} />
       <FilterBar filters={filters} />
     </MuiToolbar>
   );
