@@ -1,10 +1,15 @@
-/** @jsx jsx */
-import { jsx, css } from '@emotion/core';
 import { TableRow, TableCell } from '@material-ui/core';
 import { useDrag, useDrop } from 'react-dnd';
 import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 
 const DND_ITEM_TYPE = 'row';
+
+const useStyles = makeStyles({
+  root: {
+    opacity: ({isDragging}) => isDragging ? 0.1 : 1
+  },
+});
 
 export default function Row({
   row: {cells, index},
@@ -79,6 +84,8 @@ export default function Row({
     }),
   });
 
+  const classes = useStyles({isDragging});
+
   return (
     <TableRow
       ref={el => {
@@ -86,11 +93,12 @@ export default function Row({
         drop(el);
         dropRef.current = el;
       }}
-      css={css`opacity: ${isDragging ? 0.1 : 1};`}
+      className={classes.root}
     >
       {cells.map(c => (
         <TableCell
-          css={c.column.xCss}
+          // TODO
+          // css={c.column.xCss}
           {...c.getCellProps()}
         >
           {c.render('Cell', {
