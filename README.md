@@ -1,6 +1,6 @@
 # reactkit-table
 
-> A model based Table component using react-table and material-ui
+> Table component using react-table and material-ui
 
 [![NPM](https://img.shields.io/npm/v/reactkit-table.svg)](https://www.npmjs.com/package/reactkit-table)
 
@@ -38,7 +38,7 @@ export default function SomeList() {
 ## Props
 
 ### columns
-* Columns model
+* configuration of table columns
 * Type: array of `Column`
 * Required
 * Memoized
@@ -128,7 +128,7 @@ TODO
 * Type: string
 * Default: `'Search'`
 
-## Models
+## Configuration
 
 ### Column
 
