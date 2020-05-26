@@ -1,20 +1,32 @@
-/** @jsx jsx */
-import { jsx, css } from '@emotion/core';
-import { Table as MrTable, TableHead, TableRow, TableCell, TableBody, TableFooter } from '@material-ui/core';
-import { useTable, usePagination, useFilters, useGlobalFilter, useRowSelect, useExpanded } from 'react-table';
-import _ from 'lodash';
-import { Fragment, useMemo, useCallback } from 'react';
-import Toolbar from './Toolbar';
+import { Table as MrTable, TableBody, TableCell, TableFooter, TableHead, TableRow } from '@material-ui/core';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import React, { Fragment, useCallback, useMemo } from 'react';
+import { useExpanded, useFilters, useGlobalFilter, usePagination, useRowSelect, useTable } from 'react-table';
+import adaptColumns from './column/adaptColumns';
+import flattenGlobalFilter from './filter/flattenGlobalFilter';
 import GlobalFilter from './filter/GlobalFilter';
-import TablePropTypes from './TablePropTypes';
 import Pagination from './Pagination';
 import Row from './Row';
-import flattenGlobalFilter from './filter/flattenGlobalFilter';
-import adaptColumns from './column/adaptColumns';
+import TablePropTypes from './TablePropTypes';
+import Toolbar from './Toolbar';
 import useAsyncModeIfSo from './useAsyncModeIfSo';
-import { withStyles } from '@material-ui/core/styles';
+import HeadCell from './HeadCell';
 
 Table.propTypes = TablePropTypes;
+
+const useStyles = makeStyles({
+  root: {
+    '& .MuiTableCell-root': {
+      padding: 8,
+    },
+    '& .MuiTableCell-head': {
+      fontWeight: 'bold'
+    },
+    '& tbody tr:hover': {
+      backgroundColor: '#f5f8fa'
+    },
+  }
+});
 
 function Table(props) {
   const {
@@ -41,6 +53,8 @@ function Table(props) {
     dataLoadingText = 'Data loading...',
     searchText,
   } = props;
+
+  const classes = useStyles();
 
   if (queryRecords && rowDnd) {
     throw new Error('Must not useRowDnd in async mode(queryRecords)');
@@ -173,42 +187,15 @@ function Table(props) {
         rowDnd={rowDnd}
       />
       <MrTable
-        css={css`
-.MuiTableCell-root {
-  padding: 8px;
-}
-.MuiTableCell-head {
-  font-weight: bold;
-}
-tbody tr:hover {
-  background-color: #f5f8fa;
-}
-            `}
+        className={classes.root}
         {...getTableProps()}
       >
         <TableHead>
           {headerGroups.map(g => (
             <TableRow {...g.getHeaderGroupProps()}>
-              {g.headers.map(h => {
-                const isParent = !!h.headers;
-                return (
-                  <TableCell
-                    css={isParent
-                         ? css`
-background-color: #f5f8fa;
-&:not(:last-child) {
-  border-right: 1px solid #e1e8ed;
-}
-                           `
-                         : h.xCss
-                        }
-                    {...h.getHeaderProps()}
-                    align={isParent ? 'center' : 'left'}
-                  >
-                    {h.render('Header')}
-                  </TableCell>
-                );
-              })}
+              {g.headers.map(h =>
+                <HeadCell {...h.getHeaderProps()} header={h} />
+              )}
             </TableRow>
           ))}
         </TableHead>
