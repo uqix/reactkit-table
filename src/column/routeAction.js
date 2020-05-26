@@ -1,8 +1,14 @@
-/** @jsx jsx */
-import { jsx, css } from '@emotion/core';
 import { Button } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
 import _ from 'lodash';
+import React from 'react';
+import { Link } from 'react-router-dom';
+
+const useStyles = makeStyles({
+  root: {
+    minWidth: 32
+  },
+});
 
 export default function routeAction(
   // 显示内容
@@ -17,6 +23,8 @@ export default function routeAction(
   ...button
 ) {
   return function(props) {
+    const classes = useStyles();
+
     const buttonOverrides = _.assign(
       {},
       ...button
@@ -26,7 +34,7 @@ export default function routeAction(
 
     return (
       <Button
-        css={css`min-width: 32px;`}
+        className={classes.root}
         to={to(props)}
         {...buttonOverrides}
         size='small'
