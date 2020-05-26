@@ -1,8 +1,14 @@
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core';
+import { jsx } from '@emotion/core';
+import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import React from 'react';
-import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+  optionAll: {
+    color: 'gray'
+  }
+});
 
 function SelectColumnFilter({
   column,
@@ -40,6 +46,8 @@ function SelectColumnFilter({
     [id, preFilteredRows, options]
   );
 
+  const classes = useStyles();
+
   return (
     <FormControl>
       <InputLabel>{Header}</InputLabel>
@@ -52,7 +60,7 @@ function SelectColumnFilter({
           setFilter(event.target.value || undefined);
         }}
       >
-        <MenuItem value='' css={css`color: gray`}>
+        <MenuItem value='' className={classes.optionAll}>
           {optionAllText}
         </MenuItem>
 
