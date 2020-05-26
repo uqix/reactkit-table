@@ -1,8 +1,6 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
 import { TextField } from '@material-ui/core';
 import _ from 'lodash';
-import {Fragment} from 'react';
+import React, { Fragment } from 'react';
 
 export default function NumberColumnFilter({column, advancedModeEnabled}) {
   const {filterValue, setFilter, Header} = column;

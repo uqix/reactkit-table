@@ -1,6 +1,5 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
 import { TextField } from '@material-ui/core';
+import React from 'react';
 
 export default function TextColumnFilter({column: {filterValue, setFilter, Header}}) {
   return (

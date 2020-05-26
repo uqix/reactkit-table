@@ -1,6 +1,4 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
-import { Fragment } from 'react';
+import React, { Fragment } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 
 export default function actionColumn(actions) {
